@@ -21,6 +21,7 @@
 /* Tree operations are based on CLRS RB Tree. */
 
 #include "treetable.h"
+#include <limits.h>
 
 
 #define RB_BLACK 1
@@ -516,4 +517,50 @@ static RBNode *get_successor_node(TreeTable const * const table, RBNode *x)
         y = y->parent;
     }
     return y;
+}
+
+static int check_height(TreeTable *t, RBNode *n) {
+    if (n == t->sentinel)
+        return 0;
+
+    int hl = check_height(t, n->left);
+    if (hl == -1)
+        return -1;
+
+    int hr = check_height(t, n->right);
+    if (hr == -1)
+        return -1;
+
+    if (hl - hr > 1 || hr - hl > 1) // means unbalanced tree
+        return -1;
+
+    return (hl > hr ? hl : hr) + 1;
+}
+
+int balanced(TreeTable *t) {
+    if (!t)
+        return 1;
+
+    return check_height(t, t->root) != -1;
+}
+
+
+static int is_sorted_rec(TreeTable *t, RBNode *n, int min, int max) {
+    if (n == t->sentinel)
+        return 1;
+
+    int key = *((int *)n->key);
+
+    if (key <= min || key >= max)
+        return 0;
+
+    return is_sorted_rec(t, n->left, min, key) &&
+           is_sorted_rec(t, n->right, key, max);
+}
+
+int sorted(TreeTable *t) {
+    if (!t)
+        return 1;
+
+    return is_sorted_rec(t, t->root, INT_MIN, INT_MAX);
 }

@@ -110,5 +110,7 @@ enum cc_stat  treetable_get_lesser_than  (TreeTable const * const table, const v
 size_t        treetable_size             (TreeTable const * const table);
 bool          treetable_contains_key     (TreeTable const * const table, const void *key);
 size_t        treetable_contains_value   (TreeTable const * const table, const void *value);
+int           balanced                   (TreeTable *t);
+int           sorted                     (TreeTable *t);
 
 #endif /* COLLECTIONS_C_TREETABLE_H */
