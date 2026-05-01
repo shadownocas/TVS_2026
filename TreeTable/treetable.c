@@ -147,7 +147,9 @@ static void tree_destroy(TreeTable *table, RBNode *n)
     tree_destroy(table, n->left);
     tree_destroy(table, n->right);
 
-    table->mem_free(n);
+    table->mem_free(n->key);    /* free the key   */
+    table->mem_free(n->value);  /* free the value */
+    table->mem_free(n);         /* free the node  */
 }
 
 /**
