@@ -54,96 +54,115 @@
 #endif
 
 #ifndef __AFL_INIT
-#define __AFL_INIT() do {} while(0)
+#define __AFL_INIT() \
+    do               \
+    {                \
+    } while (0)
 #endif
 
-/* ================================================================== */
-int main(void) {
+static int parse_int(const char *s, int *out)
+{
+    char *end;
+    long v = strtol(s, &end, 10);
+    if (s == end)
+        return 0;
+    *out = (int)v;
+    return 1;
+}
+
+int main(void)
+{
 
     __AFL_INIT();
 
     static char buf[4096];
 
-    while (__AFL_LOOP(1000)) {
+    while (__AFL_LOOP(1000))
+    {
 
-        /* --- 1. Read entire stdin into buffer -------------------- */
         size_t len = fread(buf, 1, sizeof(buf) - 1, stdin);
         if (len == 0)
             continue;
         buf[len] = '\0';
 
-        /* --- 2. Create a fresh TreeTable ------------------------- */
         TreeTable *t = NULL;
-        if (treetable_new(&t) != CC_OK || t == NULL)
+        if (treetable_new(&t) != CC_OK || !t)
             continue;
 
-        /* --- 3. Parse line by line ------------------------------- */
         char *line = buf;
 
-        while (line && *line != '\0') {
+        while (line && *line)
+        {
 
-            /* find end of line */
-            char *newline = strchr(line, '\n');
-            if (newline)
-                *newline = '\0';
+            char *next = strchr(line, '\n');
+            if (next)
+                *next = '\0';
 
-            /* skip comment lines and empty lines */
-            if (*line == '#' || *line == '\0') {
-                line = newline ? newline + 1 : NULL;
+            if (*line == '#' || *line == '\0')
+            {
+                line = next ? next + 1 : NULL;
                 continue;
             }
 
-            char cmd[16] = {0};
-            int  key, val;
+            char cmd[32];
+            int key, val;
             void *out = NULL;
 
-            /* parse command word */
-            if (sscanf(line, "%15s", cmd) != 1)
-                goto done;
-
-            /* ---- add <key> <val> -------------------------------- */
-            if (strcmp(cmd, "add") == 0) {
-                if (sscanf(line, "%*s %d %d", &key, &val) != 2)
-                    goto done;
-
-                int *k = malloc(sizeof(int));
-                int *v = malloc(sizeof(int));
-                if (!k || !v) { free(k); free(v); goto done; }
-
-                *k = key;
-                *v = val;
-
-                treetable_add(t, k, v);
-
-                /* Oracle: assert invariants after every modification */
-                assert(balanced(t) && sorted(t));
-
-            /* ---- get <key> ------------------------------------- */
-            } else if (strcmp(cmd, "get") == 0) {
-                if (sscanf(line, "%*s %d", &key) != 1)
-                    goto done;
-                treetable_get(t, &key, &out);
-
-            /* ---- first ----------------------------------------- */
-            } else if (strcmp(cmd, "first") == 0) {
-                treetable_get_first_key(t, &out);
-
-            /* ---- greater <key> --------------------------------- */
-            } else if (strcmp(cmd, "greater") == 0) {
-                if (sscanf(line, "%*s %d", &key) != 1)
-                    goto done;
-                treetable_get_greater_than(t, &key, &out);
-
-            } else {
-                /* unrecognised command — stop parsing */
-                goto done;
+            if (sscanf(line, "%31s", cmd) != 1)
+            {
+                line = next ? next + 1 : NULL;
+                continue;
             }
 
-            line = newline ? newline + 1 : NULL;
+            if (strcmp(cmd, "add") == 0)
+            {
+                if (sscanf(line, "add %d %d", &key, &val) != 2)
+                {
+                    line = next ? next + 1 : NULL;
+                    continue;
+                }
+                int *k = malloc(sizeof(int));
+                int *v = malloc(sizeof(int));
+                if (!k || !v)
+                {
+                    free(k);
+                    free(v);
+                    continue;
+                }
+                *k = key;
+                *v = val;
+                treetable_add(t, k, v);
+                assert(balanced(t) && sorted(t));
+            }
+
+            else if (strcmp(cmd, "get") == 0)
+            {
+                if (!parse_int(line + 3, &key))
+                {
+                    line = next ? next + 1 : NULL;
+                    continue;
+                }
+                treetable_get(t, &key, &out);
+            }
+
+            else if (strcmp(cmd, "first") == 0)
+            {
+                treetable_get_first_key(t, &out);
+            }
+
+            else if (strcmp(cmd, "greater") == 0)
+            {
+                if (!parse_int(line + 7, &key))
+                {
+                    line = next ? next + 1 : NULL;
+                    continue;
+                }
+                treetable_get_greater_than(t, &key, &out);
+            }
+
+            line = next ? next + 1 : NULL;
         }
 
-    done:
-        /* --- 4. Destroy table — also frees all keys and values --- */
         treetable_destroy(t);
     }
 
