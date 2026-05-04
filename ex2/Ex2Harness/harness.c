@@ -2,40 +2,26 @@
  * harness.c — AFL++ Fuzzing Harness for TreeTable
  *
  * INPUT FORMAT (text, one command per line via stdin):
+ * add <key> <value>        — calls treetable_add(t, key, val)
+ * get <key>                — calls treetable_get(t, key, &out)
+ * first                    — calls treetable_get_first_key(t, &out)
+ * greater <key>            — calls treetable_get_greater_than(t, key, &out)
  *
- *   add <key> <value>        — calls treetable_add(t, key, val)
- *   get <key>                — calls treetable_get(t, key, &out)
- *   first                    — calls treetable_get_first_key(t, &out)
- *   greater <key>            — calls treetable_get_greater_than(t, key, &out)
- *
- *   Keys and values are integers.
- *   Lines starting with '#' are ignored (comments).
- *   Any unrecognised command stops parsing.
- *
- * EXAMPLE INPUT:
- *   add 5 100
- *   add 3 200
- *   add 8 300
- *   get 3
- *   first
- *   greater 5
- *
- * COMPILATION (with AFL++):
- *   afl-clang-fast -o ex2/Ex2Harness/harness ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
+ * COMPILATION (with AFL++ and AddressSanitizer):
+ * AFL_USE_ASAN=1 afl-clang-fast -g -O1 -o ex2/Ex2Harness/harness_fuzz \
+ * ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
  *
  * COMPILATION (normal gcc, for local testing):
- *   gcc -g -o ex2/Ex2Harness/harness_debug ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
- *
- * RUNNING (interactive, type commands manually):
- *   ./ex2/Ex2Harness/harness
- *
- * RUNNING (from a file):
- *   ./ex2/Ex2Harness/harness < my_commands.txt
+ * gcc -g -o ex2/Ex2Harness/harness_debug \
+ * ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
  *
  * RUNNING (with AFL++):
- *   mkdir -p ex2/Ex2Harness/seeds
- *   printf 'add 1 100\nadd 2 200\nget 1\nfirst\ngreater 1\n' > ex2/Ex2Harness/seeds/s1
- *   afl-fuzz -i ex2/Ex2Harness/seeds -o ex2/Ex2Harness/findings -- ex2/Ex2Harness/harness
+ * mkdir -p ex2/Ex2Harness/seeds
+ * printf 'add 1 100\nadd 2 200\nget 1\nfirst\ngreater 1\n' > ex2/Ex2Harness/seeds/s1
+ * afl-fuzz -i ex2/Ex2Harness/seeds -o ex2/Ex2Harness/findings -m none -- ./ex2/Ex2Harness/harness_fuzz
+ *
+ * NOTE: The '-m none' flag is mandatory when using AFL_USE_ASAN=1 because
+ * ASAN's shadow memory causes AFL's default memory limit to trigger a failure.
  */
 
 #include <stdio.h>

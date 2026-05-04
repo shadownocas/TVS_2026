@@ -29,7 +29,10 @@ These functions act as **runtime assertions** during fuzzing: `assert(balanced(t
 To run the program:
 
 - `sudo apt install afl++`
-- `afl-fuzz -i ex2/Ex2Harness/seeds -o ex2/Ex2Harness/findings -- ex2/Ex2Harness/harness`
+- `AFL_USE_ASAN=1 afl-clang-fast -g -O1 ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/ -o harness_fuzz` (this to compile)
+- `afl-fuzz -i seeds -o outputs -m none -- ./harness_fuzz` (this to run)
+
+AFL_USE_ASAN=1 afl-clang-fast -g -O1 ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/ -o harness_fuzz
 
 To replay a crash:
 - `ls ex2/Ex2Harness/findings/crashes/` Then choose one like: `ex2/Ex2Harness/findings/crashes/id:000000,sig:11,src:000000,time:4,op:flip1,pos:0`
