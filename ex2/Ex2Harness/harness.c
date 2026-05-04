@@ -1,27 +1,43 @@
 /*
  * harness.c — AFL++ Fuzzing Harness for TreeTable
  *
- * INPUT FORMAT (text, one command per line via stdin):
- * add <key> <value>        — calls treetable_add(t, key, val)
- * get <key>                — calls treetable_get(t, key, &out)
- * first                    — calls treetable_get_first_key(t, &out)
- * greater <key>            — calls treetable_get_greater_than(t, key, &out)
+ * INPUT FORMAT (binary, read from stdin):
  *
- * COMPILATION (with AFL++ and AddressSanitizer):
- * AFL_USE_ASAN=1 afl-clang-fast -g -O1 -o ex2/Ex2Harness/harness_fuzz \
- * ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
+ *   A flat sequence of commands. Each command begins with a 1-byte opcode,
+ *   followed by command-specific payload:
+ *
+ *   [0x00] treetable_add(t, key, val)
+ *     Payload: 4 bytes (int key) + 4 bytes (int value) = 8 bytes
+ *     Total:   9 bytes
+ *     Oracle:  assert(balanced(t) && sorted(t)) after call
+ *
+ *   [0x01] treetable_get(t, key, &out)
+ *     Payload: 4 bytes (int key)
+ *     Total:   5 bytes
+ *     Oracle:  none (read-only)
+ *
+ *   [0x02] treetable_get_first_key(t, &out)
+ *     Payload: none
+ *     Total:   1 byte
+ *     Oracle:  none (read-only)
+ *
+ *   [0x03] treetable_get_greater_than(t, key, &out)
+ *     Payload: 4 bytes (int key)
+ *     Total:   5 bytes
+ *     Oracle:  none (read-only)
+ *
+ *   Any unrecognised opcode or insufficient remaining bytes stops parsing.
+ *
+ * COMPILATION (with AFL++):
+ *   afl-clang-fast -o ex2/Ex2Harness/harness ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
  *
  * COMPILATION (normal gcc, for local testing):
- * gcc -g -o ex2/Ex2Harness/harness_debug \
- * ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
+ *   gcc -o ex2/Ex2Harness/harness ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
  *
- * RUNNING (with AFL++):
- * mkdir -p ex2/Ex2Harness/seeds
- * printf 'add 1 100\nadd 2 200\nget 1\nfirst\ngreater 1\n' > ex2/Ex2Harness/seeds/s1
- * afl-fuzz -i ex2/Ex2Harness/seeds -o ex2/Ex2Harness/findings -m none -- ./ex2/Ex2Harness/harness_fuzz
- *
- * NOTE: The '-m none' flag is mandatory when using AFL_USE_ASAN=1 because
- * ASAN's shadow memory causes AFL's default memory limit to trigger a failure.
+ * RUNNING:
+ *  mkdir -p ex2/Ex2Harness/seeds
+ *  printf '\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x01\x00\x00\x00' > ex2/Ex2Harness/seeds/s1
+ *  afl-fuzz -i ex2/Ex2Harness/seeds -o ex2/Ex2Harness/findings -- ex2/Ex2Harness/harness
  */
 
 #include <stdio.h>
@@ -40,115 +56,103 @@
 #endif
 
 #ifndef __AFL_INIT
-#define __AFL_INIT() \
-    do               \
-    {                \
-    } while (0)
+#define __AFL_INIT() do {} while(0)
 #endif
 
-static int parse_int(const char *s, int *out)
-{
-    char *end;
-    long v = strtol(s, &end, 10);
-    if (s == end)
-        return 0;
-    *out = (int)v;
+/* ------------------------------------------------------------------
+ * Safe read helpers — advance cursor, return 0 on underflow
+ * ------------------------------------------------------------------ */
+static int read_byte(const unsigned char *buf, size_t len,
+                     size_t *cur, unsigned char *out) {
+    if (*cur >= len) return 0;
+    *out = buf[(*cur)++];
     return 1;
 }
 
-int main(void)
-{
+static int read_int(const unsigned char *buf, size_t len,
+                    size_t *cur, int *out) {
+    if (*cur + 4 > len) return 0;
+    memcpy(out, buf + *cur, 4);
+    *cur += 4;
+    return 1;
+}
+
+/* ================================================================== */
+int main(void) {
 
     __AFL_INIT();
 
-    static char buf[4096];
+    static unsigned char buf[4096]; // No risk of stack overflow since it doesnt live in stack
 
-    while (__AFL_LOOP(1000))
-    {
+    while (__AFL_LOOP(1000)) {
 
-        size_t len = fread(buf, 1, sizeof(buf) - 1, stdin);
+        /* --- 1. Read input from stdin ---------------------------- */
+        size_t len = fread(buf, 1, sizeof(buf), stdin);
         if (len == 0)
             continue;
-        buf[len] = '\0';
 
+        /* --- 2. Create a fresh TreeTable ------------------------- */
         TreeTable *t = NULL;
-        if (treetable_new(&t) != CC_OK || !t)
+        if (treetable_new(&t) != CC_OK || t == NULL)
             continue;
 
-        char *line = buf;
+        /* --- 3. Parse and dispatch commands ---------------------- */
+        size_t cur = 0;
 
-        while (line && *line)
-        {
+        while (cur < len) {
 
-            char *next = strchr(line, '\n');
-            if (next)
-                *next = '\0';
+            unsigned char opcode;
+            if (!read_byte(buf, len, &cur, &opcode))
+                break;
 
-            if (*line == '#' || *line == '\0')
-            {
-                line = next ? next + 1 : NULL;
-                continue;
-            }
-
-            char cmd[32];
-            int key, val;
+            int raw_key, raw_val;
             void *out = NULL;
 
-            if (sscanf(line, "%31s", cmd) != 1)
-            {
-                line = next ? next + 1 : NULL;
-                continue;
-            }
+            switch (opcode) {
 
-            if (strcmp(cmd, "add") == 0)
-            {
-                if (sscanf(line, "add %d %d", &key, &val) != 2)
+            /* ---- treetable_add ---------------------------------- */
+            case 0x00:
+                if (!read_int(buf, len, &cur, &raw_key)) goto done;
+                if (!read_int(buf, len, &cur, &raw_val)) goto done;
                 {
-                    line = next ? next + 1 : NULL;
-                    continue;
-                }
-                int *k = malloc(sizeof(int));
-                int *v = malloc(sizeof(int));
-                if (!k || !v)
-                {
-                    free(k);
-                    free(v);
-                    continue;
-                }
-                *k = key;
-                *v = val;
-                treetable_add(t, k, v);
-                assert(balanced(t) && sorted(t));
-            }
+                    int *k = malloc(sizeof(int));
+                    int *v = malloc(sizeof(int));
+                    if (!k || !v) { free(k); free(v); goto done; }
 
-            else if (strcmp(cmd, "get") == 0)
-            {
-                if (!parse_int(line + 3, &key))
-                {
-                    line = next ? next + 1 : NULL;
-                    continue;
-                }
-                treetable_get(t, &key, &out);
-            }
+                    *k = raw_key;
+                    *v = raw_val;
 
-            else if (strcmp(cmd, "first") == 0)
-            {
+                    treetable_add(t, k, v);
+
+                    /* Oracle: assert invariants after every modification */
+                    assert(balanced(t) && sorted(t));
+                }
+                break;
+
+            /* ---- treetable_get ---------------------------------- */
+            case 0x01:
+                if (!read_int(buf, len, &cur, &raw_key)) goto done;
+                treetable_get(t, &raw_key, &out);
+                break;
+
+            /* ---- treetable_get_first_key ------------------------ */
+            case 0x02:
                 treetable_get_first_key(t, &out);
-            }
+                break;
 
-            else if (strcmp(cmd, "greater") == 0)
-            {
-                if (!parse_int(line + 7, &key))
-                {
-                    line = next ? next + 1 : NULL;
-                    continue;
-                }
-                treetable_get_greater_than(t, &key, &out);
-            }
+            /* ---- treetable_get_greater_than --------------------- */
+            case 0x03:
+                if (!read_int(buf, len, &cur, &raw_key)) goto done;
+                treetable_get_greater_than(t, &raw_key, &out);
+                break;
 
-            line = next ? next + 1 : NULL;
+            default:
+                break;  /* skip unknown opcodes, keep parsing */
+            }
         }
 
+    done:
+        /* --- 4. Destroy table — also frees all keys and values --- */
         treetable_destroy(t);
     }
 
