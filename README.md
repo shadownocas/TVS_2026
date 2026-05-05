@@ -32,7 +32,7 @@ To run the program:
 - `AFL_USE_ASAN=1 afl-clang-fast -g -O1 ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/ -o harness_fuzz` (this to compile)
 - `afl-fuzz -i ex2/Ex2Harness/seeds -o ex2/Ex2Harness/outputs -m none -- ./harness_fuzz` (this to run)
 
-- `afl-cmin -i ex2/Ex2Harness/outputs/queue -o minimized_corpus -m none -- ./harness_fuzz` (this for 2.4)
+- `afl-cmin -i ex2/Ex2Harness/outputs/queue -o ex2/Ex2Harness/minimized_corpus -m none -- ./harness_fuzz` (this for 2.4)
 
 To replay a crash:
 - `ls ex2/Ex2Harness/outputs/crashes/` Then choose one like: `ex2/Ex2Harness/outputs/crashes/id:000000,sig:11,src:000000,time:4,op:flip1,pos:0`
