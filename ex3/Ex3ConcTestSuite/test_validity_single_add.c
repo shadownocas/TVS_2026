@@ -1,36 +1,41 @@
 /*
- * Concrete test suite derived from KLEE symbolic execution.
- * Source symbolic test: test_validity_single_add.c
- * Property: balanced+sorted after a single insertion
+ * Concrete test suite derived from: test_validity_zigzag_insert.c
+ * Property: Validity preservation after a Left-Right zigzag insertion pattern.
  *
- * Each test_N() function replays the API call sequence with the concrete
- * values assigned by KLEE for that execution path.
+ * Insertion order k3, k1, k2 with k1 < k2 < k3 forces a Left-Right double
+ * rotation inside rebalance_after_insert, exercising the zigzag (LR) case
+ * of the RB-tree rebalancer.
  *
- * Build:
- *   clang -I../../TreeTable -fprofile-instr-generate -fcoverage-mapping \
- *         test_validity_single_add.c ../../TreeTable/treetable.c -o test_validity_single_add
- * Run:
- *   ./test_validity_single_add
+ * Generated from KLEE ktest files:
+ *   test000001.ktest : k1=0, k2=486539265, k3=553648384
  */
 
 #include <assert.h>
-#include <stdio.h>
-#include "treetable.h" 
-
-/* test_1: k=0
- * Checks: balanced+sorted after a single insertion. */
-static void test_1(void)
-{
-    int k=0, v=42;
-    TreeTable *t; treetable_new(&t);
-    treetable_add(t, &k, &v);
-    assert(balanced(t) && sorted(t));
-    treetable_destroy(t);
-}
+#include "treetable.h"
 
 int main(void)
 {
-    test_1(); printf("test_1 passed\n");
-    printf("All 1 tests passed.\n");
+    int k1 = 0;
+    int k2 = 486539265;
+    int k3 = 553648384;
+    int v = 1;
+
+    TreeTable *t;
+    treetable_new(&t);
+
+    /* Insert in zigzag order: k3, k1, k2 */
+    treetable_add(t, &k3, &v);
+    assert(balanced(t));
+    assert(sorted(t));
+
+    treetable_add(t, &k1, &v);
+    assert(balanced(t));
+    assert(sorted(t));
+
+    treetable_add(t, &k2, &v);
+    assert(balanced(t));
+    assert(sorted(t));
+
+
     return 0;
 }

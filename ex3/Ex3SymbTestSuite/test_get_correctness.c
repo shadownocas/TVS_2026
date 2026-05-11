@@ -40,14 +40,17 @@ int main(void)
     klee_assume(k2 < INT_MAX);
     klee_assume(k3 > INT_MIN);
     klee_assume(k3 < INT_MAX);
-    klee_assume(k1 < k2 && k2 < k3);
+    klee_assume(k1 < k2);
+    klee_assume(k2 < k3);
 
     /* an absent key guaranteed different from all three */
     int absent;
     klee_make_symbolic(&absent, sizeof(absent), "absent");
     klee_assume(absent > INT_MIN);
     klee_assume(absent < INT_MAX);
-    klee_assume(absent != k1 && absent != k2 && absent != k3);
+    klee_assume(absent != k1);
+    klee_assume(absent != k2);
+    klee_assume(absent != k3);
 
     /* --- set up --- */
     TreeTable *t;

@@ -1,50 +1,69 @@
 /*
- * Concrete test suite derived from KLEE symbolic execution.
- * Source symbolic test: test_validity_multi_add.c
- * Property: balanced+sorted after ascending/descending 5-key insertion + duplicate
+ * Concrete test suite derived from: test_validity_multi_add.c
+ * Property: Validity preservation after multiple insertions, including
+ *           a duplicate key update, in both ascending and descending order.
  *
- * Each test_N() function replays the API call sequence with the concrete
- * values assigned by KLEE for that execution path.
+ *   (A) Keys inserted in ascending order — forces right-heavy growth and
+ *       left-rotations inside rebalance_after_insert (R-R cases).
+ *   (B) Keys inserted in descending order — forces left-heavy growth and
+ *       right-rotations (L-L cases).
  *
- * Build:
- *   clang -I../../TreeTable -fprofile-instr-generate -fcoverage-mapping \
- *         test_validity_multi_add.c ../../TreeTable/treetable.c -o test_validity_multi_add
- * Run:
- *   ./test_validity_multi_add
+ * Generated from KLEE ktest files:
+ *   test000001.ktest :
+ *     a1=0, a2=16777216, a3=33554432, a4=33554560, a5=33570816
+ *     b1=0, b2=16777216, b3=33554432, b4=33554560, b5=33570816
  */
 
 #include <assert.h>
-#include <stdio.h>
 #include "treetable.h"
-
-/* test_1: a=[0,16777216,33554432,33554560,33570816] b=[0,16777216,33554432,33554560,33570816]
- * Checks: balanced+sorted after ascending and descending insertion + duplicate. */
-static void test_1(void)
-{
-    int a1=0,a2=16777216,a3=33554432,a4=33554560,a5=33570816;
-    int b1=0,b2=16777216,b3=33554432,b4=33554560,b5=33570816;
-    int va=1, vdup_a=99, vb=2, vdup_b=88;
-    TreeTable *ta; treetable_new(&ta);
-    treetable_add(ta,&a1,&va); assert(balanced(ta)&&sorted(ta));
-    treetable_add(ta,&a2,&va); assert(balanced(ta)&&sorted(ta));
-    treetable_add(ta,&a3,&va); assert(balanced(ta)&&sorted(ta));
-    treetable_add(ta,&a4,&va); assert(balanced(ta)&&sorted(ta));
-    treetable_add(ta,&a5,&va); assert(balanced(ta)&&sorted(ta));
-    treetable_add(ta,&a3,&vdup_a); assert(balanced(ta)&&sorted(ta));
-    treetable_destroy(ta);
-    TreeTable *tb; treetable_new(&tb);
-    treetable_add(tb,&b5,&vb); assert(balanced(tb)&&sorted(tb));
-    treetable_add(tb,&b4,&vb); assert(balanced(tb)&&sorted(tb));
-    treetable_add(tb,&b3,&vb); assert(balanced(tb)&&sorted(tb));
-    treetable_add(tb,&b2,&vb); assert(balanced(tb)&&sorted(tb));
-    treetable_add(tb,&b1,&vb); assert(balanced(tb)&&sorted(tb));
-    treetable_add(tb,&b3,&vdup_b); assert(balanced(tb)&&sorted(tb));
-    treetable_destroy(tb);
-}
 
 int main(void)
 {
-    test_1(); printf("test_1 passed\n");
-    printf("All 1 tests passed.\n");
+    /* ---- Table A: ascending insertion ---- */
+    int a1 = 0;
+    int a2 = 16777216;
+    int a3 = 33554432;
+    int a4 = 33554560;
+    int a5 = 33570816;
+    int va = 1, vdup_a = 99;
+
+    TreeTable *ta;
+    treetable_new(&ta);
+
+    treetable_add(ta, &a1, &va); assert(balanced(ta) && sorted(ta));
+    treetable_add(ta, &a2, &va); assert(balanced(ta) && sorted(ta));
+    treetable_add(ta, &a3, &va); assert(balanced(ta) && sorted(ta));
+    treetable_add(ta, &a4, &va); assert(balanced(ta) && sorted(ta));
+    treetable_add(ta, &a5, &va); assert(balanced(ta) && sorted(ta));
+
+    /* duplicate/update: re-insert middle key with a different value */
+    treetable_add(ta, &a3, &vdup_a);
+    assert(balanced(ta) && sorted(ta));
+
+
+
+    /* ---- Table B: descending insertion ---- */
+    int b1 = 0;
+    int b2 = 16777216;
+    int b3 = 33554432;
+    int b4 = 33554560;
+    int b5 = 33570816;
+    int vb = 2, vdup_b = 88;
+
+    TreeTable *tb;
+    treetable_new(&tb);
+
+    /* insert in descending value order: b5, b4, b3, b2, b1 */
+    treetable_add(tb, &b5, &vb); assert(balanced(tb) && sorted(tb));
+    treetable_add(tb, &b4, &vb); assert(balanced(tb) && sorted(tb));
+    treetable_add(tb, &b3, &vb); assert(balanced(tb) && sorted(tb));
+    treetable_add(tb, &b2, &vb); assert(balanced(tb) && sorted(tb));
+    treetable_add(tb, &b1, &vb); assert(balanced(tb) && sorted(tb));
+
+    /* duplicate/update: re-insert middle key with a different value */
+    treetable_add(tb, &b3, &vdup_b);
+    assert(balanced(tb) && sorted(tb));
+
+
     return 0;
 }

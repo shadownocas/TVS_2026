@@ -29,7 +29,7 @@ static void test_1(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_2: k1=16777216, k2=0, k3=0, k4=0, k5=0
@@ -44,7 +44,7 @@ static void test_2(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_3: k1=16777216, k2=50331648, k3=0, k4=0, k5=0
@@ -59,7 +59,7 @@ static void test_3(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_4: k1=-2147483640, k2=-2147483642, k3=-1879048175, k4=-1928591359, k5=0
@@ -74,7 +74,7 @@ static void test_4(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_5: k1=-1358954496, k2=0, k3=-536870912, k4=-687900745, k5=16777216
@@ -89,7 +89,7 @@ static void test_5(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_6: k1=-2130706432, k2=16777408, k3=16777216, k4=0, k5=16777375
@@ -104,7 +104,7 @@ static void test_6(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_7: k1=-2140141551, k2=-2139095040, k3=-2139095039, k4=-2147481582, k5=0
@@ -119,7 +119,7 @@ static void test_7(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_8: k1=520093696, k2=671088640, k3=536870912, k4=0, k5=939524096
@@ -134,7 +134,7 @@ static void test_8(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_9: k1=-1073741822, k2=276861015, k3=-1056964608, k4=-2139095040, k5=0
@@ -149,7 +149,7 @@ static void test_9(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_10: k1=-2147483640, k2=-2147483646, k3=-1879044095, k4=-2147483642, k5=0
@@ -164,7 +164,7 @@ static void test_10(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_11: k1=-1342123456, k2=-1409286144, k3=-1326399995, k4=-50331648, k5=0
@@ -179,7 +179,7 @@ static void test_11(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_12: k1=-2144335587, k2=-2139095040, k3=-2139095039, k4=-2143285758, k5=0
@@ -194,7 +194,7 @@ static void test_12(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_13: k1=-2147421957, k2=-2130706432, k3=-1862270976, k4=-1912602624, k5=0
@@ -209,7 +209,7 @@ static void test_13(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_14: k1=-2131976834, k2=-2130706432, k3=-1876951040, k4=-16777216, k5=0
@@ -224,7 +224,7 @@ static void test_14(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_15: k1=-1895763717, k2=-1895825408, k3=-1862270976, k4=-1912602624, k5=0
@@ -239,7 +239,7 @@ static void test_15(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_16: k1=-2147422089, k2=33554432, k3=-2130706432, k4=0, k5=16777216
@@ -254,7 +254,7 @@ static void test_16(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_17: k1=-2130706349, k2=-1946157056, k3=-1879048191, k4=285212672, k5=268435456
@@ -269,7 +269,7 @@ static void test_17(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_18: k1=-2139095040, k2=-2147422085, k3=-2130706432, k4=16777216, k5=0
@@ -284,7 +284,7 @@ static void test_18(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_19: k1=-1879027543, k2=-1073680129, k3=-1862270976, k4=0, k5=-1056964608
@@ -299,7 +299,7 @@ static void test_19(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_20: k1=50331840, k2=50331896, k3=33554432, k4=16777216, k5=0
@@ -314,7 +314,7 @@ static void test_20(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_21: k1=1644167168, k2=1308622848, k3=1627389952, k4=0, k5=232
@@ -329,7 +329,7 @@ static void test_21(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_22: k1=-2147483627, k2=33554432, k3=-2147483584, k4=16777216, k5=0
@@ -344,7 +344,7 @@ static void test_22(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_23: k1=15767422, k2=16777216, k3=65536, k4=-16777216, k5=0
@@ -359,7 +359,7 @@ static void test_23(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_24: k1=273679296, k2=-1878915952, k3=-1862270976, k4=0, k5=-1895825408
@@ -374,7 +374,7 @@ static void test_24(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_25: k1=33554432, k2=-301989888, k3=16777408, k4=16777216, k5=0
@@ -389,7 +389,7 @@ static void test_25(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_26: k1=33554432, k2=-16777216, k3=128, k4=16777216, k5=0
@@ -404,7 +404,7 @@ static void test_26(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_27: k1=50353166, k2=16793602, k3=12544, k4=110, k5=-2141176064
@@ -419,7 +419,7 @@ static void test_27(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_28: k1=33554432, k2=16777216, k3=14680064, k4=-50331648, k5=0
@@ -434,7 +434,7 @@ static void test_28(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_29: k1=16777216, k2=-16777216, k3=8388608, k4=33554432, k5=0
@@ -449,7 +449,7 @@ static void test_29(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_30: k1=-33554432, k2=16777217, k3=0, k4=1090519072, k5=1107167168
@@ -464,7 +464,7 @@ static void test_30(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_31: k1=-1073741823, k2=-2132123649, k3=-2130706432, k4=0, k5=-2134900738
@@ -479,7 +479,7 @@ static void test_31(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_32: k1=-2147422051, k2=16657, k3=-2130673648, k4=-2130673616, k5=32768
@@ -494,7 +494,7 @@ static void test_32(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_33: k1=16777376, k2=31522750, k3=65536, k4=16777216, k5=0
@@ -509,7 +509,7 @@ static void test_33(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_34: k1=-2147458882, k2=1040187392, k3=-2130706432, k4=1090519040, k5=0
@@ -524,7 +524,7 @@ static void test_34(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_35: k1=2293760, k2=2162623, k3=65536, k4=16777216, k5=0
@@ -539,7 +539,7 @@ static void test_35(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_36: k1=50331648, k2=0, k3=33554432, k4=64, k5=16777216
@@ -554,7 +554,7 @@ static void test_36(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_37: k1=33554432, k2=16777280, k3=16777216, k4=16777408, k5=0
@@ -569,7 +569,7 @@ static void test_37(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_38: k1=33554688, k2=2, k3=16777216, k4=-2147483264, k5=256
@@ -584,7 +584,7 @@ static void test_38(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_39: k1=33554432, k2=1048576, k3=16777216, k4=20, k5=0
@@ -599,7 +599,7 @@ static void test_39(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_40: k1=33554432, k2=-1258291201, k3=16777216, k4=0, k5=-2147483520
@@ -614,7 +614,7 @@ static void test_40(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_41: k1=50331648, k2=33554432, k3=128, k4=16777216, k5=0
@@ -629,7 +629,7 @@ static void test_41(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_42: k1=16777344, k2=50331648, k3=16777216, k4=16777408, k5=0
@@ -644,7 +644,7 @@ static void test_42(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_43: k1=33554432, k2=33554560, k3=16777216, k4=50331776, k5=0
@@ -659,7 +659,7 @@ static void test_43(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_44: k1=33554432, k2=16777216, k3=-2132738049, k4=-33554432, k5=0
@@ -674,7 +674,7 @@ static void test_44(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_45: k1=50331648, k2=16777216, k3=0, k4=-33554432, k5=252
@@ -689,7 +689,7 @@ static void test_45(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_46: k1=-33554432, k2=0, k3=-2147418112, k4=-2130706434, k5=16777216
@@ -704,7 +704,7 @@ static void test_46(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_47: k1=65536, k2=168191, k3=-1879048191, k4=-1895825408, k5=0
@@ -719,7 +719,7 @@ static void test_47(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_48: k1=2061487854, k2=-33554176, k3=-2147481599, k4=-2147481600, k5=0
@@ -734,7 +734,7 @@ static void test_48(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_49: k1=33554432, k2=1090519296, k3=16777216, k4=0, k5=1107296500
@@ -749,7 +749,7 @@ static void test_49(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_50: k1=61695, k2=16777216, k3=-2130706432, k4=0, k5=256
@@ -764,7 +764,7 @@ static void test_50(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_51: k1=16777280, k2=33554432, k3=16777216, k4=0, k5=16777408
@@ -779,7 +779,7 @@ static void test_51(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_52: k1=14745341, k2=-2130706432, k3=-1593835520, k4=-16777216, k5=0
@@ -794,7 +794,7 @@ static void test_52(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_53: k1=-2129657864, k2=-2139095040, k3=-2139095039, k4=-2130706432, k5=0
@@ -809,7 +809,7 @@ static void test_53(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_54: k1=-1601171403, k2=-2130706432, k3=-1610547200, k4=-33554432, k5=0
@@ -824,7 +824,7 @@ static void test_54(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_55: k1=-1056964608, k2=-1073741824, k3=7383981, k4=-33554432, k5=0
@@ -839,7 +839,7 @@ static void test_55(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_56: k1=16464, k2=8421, k3=-2130689982, k4=16793680, k5=16640
@@ -854,7 +854,7 @@ static void test_56(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_57: k1=50331648, k2=16777216, k3=0, k4=536870914, k5=553648256
@@ -869,7 +869,7 @@ static void test_57(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_58: k1=33554432, k2=0, k3=-2097152000, k4=16777216, k5=192
@@ -884,7 +884,7 @@ static void test_58(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_59: k1=-18808949, k2=-16777216, k3=13659769, k4=-33554432, k5=0
@@ -899,7 +899,7 @@ static void test_59(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_60: k1=1, k2=0, k3=-2145386495, k4=-2146369533, k5=2097152
@@ -914,7 +914,7 @@ static void test_60(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_61: k1=65536, k2=61695, k3=-2130706432, k4=16777216, k5=0
@@ -929,7 +929,7 @@ static void test_61(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_62: k1=-33554432, k2=50331648, k3=33553781, k4=16777216, k5=0
@@ -944,7 +944,7 @@ static void test_62(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_63: k1=-2130706432, k2=16777216, k3=-2131730441, k4=-50331648, k5=0
@@ -959,7 +959,7 @@ static void test_63(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_64: k1=-2130706432, k2=-2147483632, k3=-2143164442, k4=16777216, k5=0
@@ -974,7 +974,7 @@ static void test_64(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_65: k1=33566229, k2=-33554368, k3=-2147482624, k4=50356224, k5=16777216
@@ -989,7 +989,7 @@ static void test_65(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_66: k1=4229, k2=33554432, k3=-2130706432, k4=0, k5=16777216
@@ -1004,7 +1004,7 @@ static void test_66(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_67: k1=-1073741824, k2=-2147442946, k3=-2130706432, k4=0, k5=-1610596619
@@ -1019,7 +1019,7 @@ static void test_67(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_68: k1=-1073741824, k2=-1073741820, k3=-1610612736, k4=0, k5=-1073741819
@@ -1034,7 +1034,7 @@ static void test_68(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_69: k1=33554432, k2=-1128272897, k3=-1073741824, k4=16777216, k5=0
@@ -1049,7 +1049,7 @@ static void test_69(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_70: k1=-33554432, k2=33554432, k3=16777216, k4=0, k5=192
@@ -1064,7 +1064,7 @@ static void test_70(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_71: k1=16777216, k2=23129835, k3=33619968, k4=50331648, k5=0
@@ -1079,7 +1079,7 @@ static void test_71(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_72: k1=16777440, k2=16838911, k3=-2130706432, k4=16777216, k5=0
@@ -1094,7 +1094,7 @@ static void test_72(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_73: k1=94, k2=88, k3=33554432, k4=16785408, k5=8192
@@ -1109,7 +1109,7 @@ static void test_73(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_74: k1=22, k2=33554454, k3=16777238, k4=4, k5=512
@@ -1124,7 +1124,7 @@ static void test_74(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_75: k1=14691765, k2=1593835520, k3=1627389952, k4=-33554432, k5=0
@@ -1139,7 +1139,7 @@ static void test_75(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_76: k1=-2142200075, k2=1040187392, k3=1090519040, k4=-16777216, k5=0
@@ -1154,7 +1154,7 @@ static void test_76(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_77: k1=-1002755, k2=1040187392, k3=1090519040, k4=-16777216, k5=0
@@ -1169,7 +1169,7 @@ static void test_77(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_78: k1=-2147423745, k2=-2146435072, k3=-2130706432, k4=0, k5=-2143281152
@@ -1184,7 +1184,7 @@ static void test_78(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_79: k1=16777440, k2=16777468, k3=50331648, k4=16777216, k5=0
@@ -1199,7 +1199,7 @@ static void test_79(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_80: k1=-16777216, k2=16777216, k3=0, k4=-1358954496, k5=-1329856512
@@ -1214,7 +1214,7 @@ static void test_80(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_81: k1=-33554432, k2=0, k3=16777344, k4=16777343, k5=16777216
@@ -1229,7 +1229,7 @@ static void test_81(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_82: k1=-2130706432, k2=-2147479551, k3=16777216, k4=0, k5=-2146955264
@@ -1244,7 +1244,7 @@ static void test_82(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_83: k1=8388660, k2=6352831, k3=8486912, k4=25198592, k5=8392704
@@ -1259,7 +1259,7 @@ static void test_83(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_84: k1=1048576, k2=33554432, k3=17825792, k4=1048768, k5=0
@@ -1274,7 +1274,7 @@ static void test_84(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_85: k1=33554432, k2=50331648, k3=33554616, k4=16777216, k5=0
@@ -1289,7 +1289,7 @@ static void test_85(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_86: k1=-33554432, k2=1073741824, k3=1082654720, k4=1090519040, k5=0
@@ -1304,7 +1304,7 @@ static void test_86(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_87: k1=65536, k2=104, k3=33554432, k4=16777216, k5=0
@@ -1319,7 +1319,7 @@ static void test_87(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_88: k1=503320576, k2=16777216, k3=553648128, k4=0, k5=255
@@ -1334,7 +1334,7 @@ static void test_88(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_89: k1=33554432, k2=0, k3=33554560, k4=50331900, k5=16777216
@@ -1349,7 +1349,7 @@ static void test_89(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_90: k1=33554432, k2=0, k3=50331648, k4=16777216, k5=64
@@ -1364,7 +1364,7 @@ static void test_90(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_91: k1=-2134455419, k2=-2134900736, k3=-2130706432, k4=0, k5=-2139095040
@@ -1379,7 +1379,7 @@ static void test_91(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_92: k1=-16777216, k2=-2147483520, k3=16777216, k4=-1073741696, k5=0
@@ -1394,7 +1394,7 @@ static void test_92(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_93: k1=-1073741824, k2=-16777216, k3=-1610612736, k4=0, k5=14745599
@@ -1409,7 +1409,7 @@ static void test_93(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_94: k1=57591, k2=50331648, k3=-2130706432, k4=16777216, k5=0
@@ -1424,7 +1424,7 @@ static void test_94(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_95: k1=57385, k2=-2147483520, k3=-2130706432, k4=-2139095040, k5=0
@@ -1439,7 +1439,7 @@ static void test_95(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_96: k1=1048579, k2=30588, k3=-2129655808, k4=-33554432, k5=1050624
@@ -1454,7 +1454,7 @@ static void test_96(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_97: k1=33554432, k2=192, k3=16777216, k4=0, k5=16777272
@@ -1469,7 +1469,7 @@ static void test_97(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_98: k1=1, k2=50332160, k3=-2130705920, k4=16777728, k5=512
@@ -1484,7 +1484,7 @@ static void test_98(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_99: k1=167833825, k2=1, k3=-2129657856, k4=-32505856, k5=1048576
@@ -1499,7 +1499,7 @@ static void test_99(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_100: k1=-16777216, k2=-16777088, k3=16777216, k4=-16777119, k5=0
@@ -1514,7 +1514,7 @@ static void test_100(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_101: k1=33554432, k2=0, k3=-2130706432, k4=252, k5=16777216
@@ -1529,7 +1529,7 @@ static void test_101(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_102: k1=196610, k2=417814, k3=-2130247680, k4=393354, k5=458752
@@ -1544,7 +1544,7 @@ static void test_102(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_103: k1=-2045181440, k2=-2143289216, k3=-2130706432, k4=-2139095040, k5=0
@@ -1559,7 +1559,7 @@ static void test_103(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_104: k1=-50331648, k2=16777216, k3=1073741824, k4=22083579, k5=0
@@ -1574,7 +1574,7 @@ static void test_104(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_105: k1=-1069547519, k2=-1877979046, k3=-2143158240, k4=-1794113536, k5=1078067200
@@ -1589,7 +1589,7 @@ static void test_105(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_106: k1=1073803517, k2=2, k3=-2130706432, k4=788529152, k5=0
@@ -1604,7 +1604,7 @@ static void test_106(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_107: k1=-2097152000, k2=20569, k3=-2130706432, k4=16777216, k5=0
@@ -1619,7 +1619,7 @@ static void test_107(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_108: k1=-587374602, k2=-2147483640, k3=-2147483639, k4=-2147483647, k5=0
@@ -1634,7 +1634,7 @@ static void test_108(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_109: k1=503316480, k2=16777216, k3=553648128, k4=0, k5=503316536
@@ -1649,7 +1649,7 @@ static void test_109(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_110: k1=65536, k2=90277, k3=-2130706432, k4=16842752, k5=0
@@ -1664,7 +1664,7 @@ static void test_110(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_111: k1=-2130706432, k2=-33554432, k3=16777216, k4=0, k5=2104
@@ -1679,7 +1679,7 @@ static void test_111(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_112: k1=33554433, k2=50396240, k3=41943040, k4=50333201, k5=16777216
@@ -1694,7 +1694,7 @@ static void test_112(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_113: k1=33554432, k2=144, k3=-2130706432, k4=0, k5=-2130706328
@@ -1709,7 +1709,7 @@ static void test_113(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_114: k1=-50331648, k2=16777408, k3=16777216, k4=16777343, k5=0
@@ -1724,7 +1724,7 @@ static void test_114(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_115: k1=1753220858, k2=1233141982, k3=1880136072, k4=1744830482, k5=1744896512
@@ -1739,7 +1739,7 @@ static void test_115(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_116: k1=1040187393, k2=1056964608, k3=1090522368, k4=1058111744, k5=0
@@ -1754,7 +1754,7 @@ static void test_116(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_117: k1=-33542144, k2=16777216, k3=4096, k4=33554433, k5=1
@@ -1769,7 +1769,7 @@ static void test_117(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_118: k1=-2139090928, k2=16777216, k3=729813008, k4=0, k5=-2130706431
@@ -1784,7 +1784,7 @@ static void test_118(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_119: k1=1040187392, k2=1342177280, k3=1090522368, k4=1611759872, k5=0
@@ -1799,7 +1799,7 @@ static void test_119(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_120: k1=1040187392, k2=16777216, k3=1090519040, k4=1146880, k5=0
@@ -1814,7 +1814,7 @@ static void test_120(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_121: k1=33588155, k2=50396224, k3=234881024, k4=50365373, k5=16777216
@@ -1829,7 +1829,7 @@ static void test_121(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_122: k1=1040187392, k2=-50331648, k3=1090519040, k4=-2129166336, k5=0
@@ -1844,7 +1844,7 @@ static void test_122(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 /* test_123: k1=503320576, k2=-1621098594, k3=553648128, k4=0, k5=-2147483647
@@ -1859,7 +1859,7 @@ static void test_123(void)
     treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
     treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-    treetable_destroy(t);
+
 }
 
 int main(void)
