@@ -1,60 +1,48 @@
 #!/usr/bin/env bash
-# run_coverage.sh — Compiles harness with coverage, runs test inputs,
-#                   and generates an llvm-cov report.
-#
-# Location: ex2/scripts/run_coverage.sh
-#
-# Usage (run from project root):
-#   ./ex2/scripts/run_coverage.sh
-#
-# Test inputs should be plain text files in:
-#   ex2/Ex2Harness/tests_coverage/*.txt
-#
-# Output:
-#   ex2/Ex2HarnessCoverage.txt
+set -euo pipefail
 
-# Move to project root regardless of where the script is called from
+# run_coverage.sh — compile and run all concrete tests with clang
+# Produces ex2/Ex2CodeCoverage.txt
+
 cd "$(dirname "$0")/../.." || exit 1
 
-# Clean old data
-rm -f ex2/Ex2Harness/cov_*.profraw
-rm -f ex2/Ex2Harness/coverage.profdata
-rm -f ex2/Ex2HarnessCoverage.txt
+OUTDIR=ex2/coverage_data
+rm -rf "$OUTDIR"
+mkdir -p "$OUTDIR"
+rm -f ex2/Ex2CodeCoverage.txt
 
-echo "[+] Compiling with coverage..."
+echo "[+] Compiling tests with coverage flags..."
+count=0
+for f in $(find ex2/Ex2ConcTestSuite -type f -name '*.c'); do
+    base=$(basename "$f" .c)
+    outbin="$OUTDIR/${base}.bin"
+    if clang -g -fprofile-instr-generate -fcoverage-mapping "$f" TreeTable/treetable.c -I TreeTable/ -o "$outbin"; then
+        count=$((count+1))
+    else
+        echo "  [!] Compile failed for $f -- skipping" >&2
+    fi
+done
 
-clang -fprofile-instr-generate -fcoverage-mapping \
-    ex2/Ex2Harness/harness.c TreeTable/treetable.c \
-    -I TreeTable/ -o ex2/Ex2Harness/harness_cov
+echo "[+] Compiled $count tests."
 
-echo "[+] Running tests..."
-
-shopt -s nullglob
-test_files=(ex2/Ex2Harness/tests_coverage/*.txt)
-
-if [ ${#test_files[@]} -eq 0 ]; then
-    echo "  [!] No test files found in ex2/Ex2Harness/tests_coverage/"
-    echo "      Create .txt files there with commands like: add 1 100"
+if [ $count -eq 0 ]; then
+    echo "No test .c files found under ex2/Ex2ConcTestSuite" >&2
     exit 1
 fi
 
-for f in "${test_files[@]}"; do
-    echo "  -> Running $f"
-    LLVM_PROFILE_FILE="ex2/Ex2Harness/cov_%p.profraw" \
-        ./ex2/Ex2Harness/harness_cov < "$f"
+echo "[+] Running tests to collect profiles..."
+for b in "$OUTDIR"/*.bin; do
+    echo "  -> Running $b"
+    LLVM_PROFILE_FILE="$OUTDIR/cov_%p.profraw" "$b" || true
 done
 
 echo "[+] Merging profiles..."
+llvm-profdata merge -sparse "$OUTDIR"/cov_*.profraw -o "$OUTDIR"/coverage.profdata
 
-llvm-profdata merge -sparse \
-    ex2/Ex2Harness/cov_*.profraw \
-    -o ex2/Ex2Harness/coverage.profdata
+# Use one of the compiled binaries as the instrumented executable for llvm-cov
+exe=$(ls "$OUTDIR"/*.bin | head -n1)
 
-echo "[+] Generating report..."
+echo "[+] Generating report into ex2/Ex2CodeCoverage.txt..."
+llvm-cov show "$exe" -instr-profile="$OUTDIR"/coverage.profdata TreeTable/treetable.c > ex2/Ex2CodeCoverage.txt
 
-llvm-cov show ex2/Ex2Harness/harness_cov \
-    -instr-profile=ex2/Ex2Harness/coverage.profdata \
-    TreeTable/treetable.c > ex2/Ex2HarnessCoverage.txt
-
-echo "[+] Done."
-echo "Coverage report: ex2/Ex2HarnessCoverage.txt"
+echo "[+] Done. Report saved to ex2/Ex2CodeCoverage.txt"
