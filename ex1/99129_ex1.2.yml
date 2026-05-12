@@ -1,0 +1,108 @@
+report:
+  - bug:
+      type: Null Dereference
+      lineno: 76
+      class: tp
+      description: |
+        Found by Infer. map can be NULL if malloc fails in hashmap_new(), but it is dereferenced through map->size and map->fields.
+      recommendation: |
+        Check malloc result before using map.
+
+  - bug:
+      type: Null Dereference
+      lineno: 72
+      class: tp
+      description: |
+        Found by clang-analyzer. If fields allocation fails, the function frees map but continues executing and dereferences fields.
+      recommendation: |
+        Return NULL immediately after free(map).
+
+  - bug:
+      type: Invalid Argument
+      lineno: 60
+      class: fn
+      description: |
+        Not found by the tools. hashmap_new() accepts size <= 0. Later, hashmap_set() and hashmap_get() call hashmap_hash(key, map->size - 1). For size 0, this leads to modulo by zero in hashmap_hash. For negative sizes, the allocation size and indexing become invalid.
+      recommendation: |
+        Reject size <= 0 in hashmap_new().
+
+  - bug:
+      type: Null Dereference
+      lineno: 94
+      class: fn
+      description: |
+        Not found by the tools. hashmap_free() assumes map is not NULL. If the caller passes NULL, map->size is dereferenced.
+      recommendation: |
+        Add if (map == NULL) return; at the beginning of hashmap_free().
+
+  - bug:
+      type: Null Dereference
+      lineno: 102
+      class: fn
+      description: |
+        Not found by the tools. hashmap_set() assumes map, map->fields, and key are non-NULL. Passing NULL would cause a null dereference in hashmap_hash() or when accessing map->fields.
+      recommendation: |
+        Validate map, map->fields, and key before using them.
+
+  - bug:
+      type: Memory Leak
+      lineno: 130
+      class: tp
+      description: |
+        Found by Infer. hashmap_set() allocates a new entries array but overwrites field->entries without freeing the previous array.
+      recommendation: |
+        Use realloc safely or free the old entries array after copying.
+
+  - bug:
+      type: Null Dereference
+      lineno: 120
+      class: fn
+      description: |
+        Not found by the tools as a concrete bug. entries is allocated with malloc but is used by memcpy without checking whether malloc returned NULL.
+      recommendation: |
+        Check entries before memcpy.
+
+  - bug:
+      type: Heap Buffer Overflow
+      lineno: 124
+      class: tp
+      description: |
+        Found by clang-analyzer as an incorrect malloc size. malloc(sizeof(key)) allocates the size of the pointer, not the length of the string. strcpy may write past the allocated buffer.
+      recommendation: |
+        Allocate strlen(key) + 1 bytes.
+
+  - bug:
+      type: Null Dereference
+      lineno: 132
+      class: fn
+      description: |
+        Not found by the tools as a concrete bug. val is allocated with malloc in hashmap_set() and then passed to memcpy without a NULL check.
+      recommendation: |
+        Check val before memcpy.
+
+  - bug:
+      type: Realloc Misuse
+      lineno: 141
+      class: fn
+      description: |
+        Not found by the tools. The result of realloc is assigned directly to field->entries. If realloc fails, the old pointer is lost and the hashmap becomes inconsistent.
+      recommendation: |
+        Store realloc's result in a temporary pointer and only assign it to field->entries if it succeeds.
+
+  - bug:
+      type: Null Dereference
+      lineno: 156
+      class: tp
+      description: |
+        Found by Infer. val is allocated with malloc in hashmap_get() and then passed to memcpy without being checked.
+      recommendation: |
+        Check val before memcpy.
+
+  - bug:
+      type: Memory Leak
+      lineno: 170
+      class: tp
+      description: |
+        Found by clang-analyzer. main() receives a heap-allocated pointer from hashmap_get() but never frees it.
+      recommendation: |
+        Free ret after using it.

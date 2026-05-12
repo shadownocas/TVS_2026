@@ -1,0 +1,72 @@
+report:
+  - bug:
+      type: Null Dereference
+      lineno: 76
+      class: tp
+      description: |
+        Found by Infer. In hashmap_new(), map is allocated with malloc at line 61 but the return value is not checked. If malloc returns NULL, map is dereferenced at line 76.
+      recommendation: |
+        Check whether map is NULL immediately after malloc and return NULL before dereferencing it.
+
+  - bug:
+      type: Null Dereference
+      lineno: 72
+      class: tp
+      description: |
+        Found by clang-analyzer. If the allocation of fields fails, the code frees map but continues execution. Then fields is still NULL and field->size is dereferenced inside the initialization loop.
+      recommendation: |
+        Return NULL immediately after freeing map when fields allocation fails.
+
+  - bug:
+      type: Memory Leak
+      lineno: 130
+      class: tp
+      description: |
+        Found by Infer. In hashmap_set(), a new entries array is allocated at line 118. The previous field->entries pointer is overwritten at line 127 without being freed, leaking the old entries array.
+      recommendation: |
+        Use realloc safely or free the old field->entries array after copying its contents.
+
+  - bug:
+      type: Incorrect malloc size
+      lineno: 124
+      class: tp
+      description: |
+        Found by clang-analyzer. entry->key is allocated with malloc(sizeof(key)), but key is a char pointer. This allocates the size of the pointer instead of the length of the string, which can cause a heap buffer overflow when strcpy copies the key.
+      recommendation: |
+        Allocate strlen(key) + 1 bytes for the key string.
+
+  - bug:
+      type: Insecure API Usage
+      lineno: 125
+      class: tp
+      description: |
+        Found by clang-analyzer with security.insecureAPI.strcpy. The code uses strcpy, which performs an unbounded string copy. Together with the wrong allocation size at line 124, this can overflow entry->key.
+      recommendation: |
+        Allocate the correct buffer size and use a bounded/correct copy such as memcpy(entry->key, key, strlen(key) + 1).
+
+  - bug:
+      type: Null Dereference
+      lineno: 156
+      class: tp
+      description: |
+        Found by Infer. In hashmap_get(), val is allocated with malloc at line 155 and is passed to memcpy without checking whether malloc returned NULL.
+      recommendation: |
+        Check whether val is NULL before calling memcpy.
+
+  - bug:
+      type: Memory Leak
+      lineno: 170
+      class: tp
+      description: |
+        Found by clang-analyzer. hashmap_get() returns dynamically allocated memory, stored in ret, but ret is never freed in main.
+      recommendation: |
+        Call free(ret) after the assertion and before freeing the hashmap.
+
+  - bug:
+      type: Memory Leak
+      lineno: 156
+      class: fp
+      description: |
+        Found by Infer. Infer reports the allocation returned by hashmap_get() as a leak. However, hashmap_get() intentionally returns ownership of the allocated copy to the caller, so the leak is not inside hashmap_get() itself. The real leak occurs in main when ret is not freed.
+      recommendation: |
+        Document that the caller owns the returned pointer and must free it, or redesign the API to avoid returning allocated memory.
