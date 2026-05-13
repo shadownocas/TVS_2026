@@ -26,18 +26,6 @@
  *     Total:   5 bytes
  *     Oracle:  none (read-only)
  *
- *   Any unrecognised opcode or insufficient remaining bytes stops parsing.
- *
- * COMPILATION (with AFL++):
- *   afl-clang-fast -o ex2/Ex2Harness/harness ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
- *
- * COMPILATION (normal gcc, for local testing):
- *   gcc -o ex2/Ex2Harness/harness ex2/Ex2Harness/harness.c TreeTable/treetable.c -I TreeTable/
- *
- * RUNNING:
- *  mkdir -p ex2/Ex2Harness/seeds
- *  printf '\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x01\x00\x00\x00' > ex2/Ex2Harness/seeds/s1
- *  afl-fuzz -i ex2/Ex2Harness/seeds -o ex2/Ex2Harness/findings -- ex2/Ex2Harness/harness
  */
 
 #include <stdio.h>
