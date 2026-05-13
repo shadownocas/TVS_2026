@@ -1,4 +1,3 @@
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/TreeTable/treetable.c:
     1|       |/*
     2|       | * Collections-C
     3|       | * Copyright (C) 2013-2015 Srđan Panić <srdja.panic@gmail.com>
@@ -25,8 +24,8 @@
    24|       |#include <limits.h>
    25|       |
    26|       |
-   27|  1.17k|#define RB_BLACK 1
-   28|  1.80k|#define RB_RED   0
+   27|    111|#define RB_BLACK 1
+   28|    137|#define RB_RED   0
    29|       |
    30|       |
    31|       |struct treetable_s {
@@ -52,16 +51,16 @@
    51|       |static RBNode *get_tree_node_by_key(TreeTable const * const table, const void *key);
    52|       |static RBNode *get_successor_node  (TreeTable const * const table, RBNode *x);
    53|       |
-   54|  1.47k|int cmp(void const *e1, void const *e2) {
-   55|  1.47k|    int i = *((int *)e1);
-   56|  1.47k|    int j = *((int *)e2);
+   54|    180|int cmp(void const *e1, void const *e2) {
+   55|    180|    int i = *((int *)e1);
+   56|    180|    int j = *((int *)e2);
    57|       |
-   58|  1.47k|    if (i < j)
-   59|    711|        return -1;
-   60|    764|    if (i == j)
-   61|     41|        return 0;
-   62|    723|    return 1;
-   63|    764|}
+   58|    180|    if (i < j)
+   59|     65|        return -1;
+   60|    115|    if (i == j)
+   61|     34|        return 0;
+   62|     81|    return 1;
+   63|    115|}
    64|       |
    65|       |
    66|       |/**
@@ -70,12 +69,12 @@
    69|       | * @param[in] conf the struct that is being initialized
    70|       | */
    71|       |void treetable_conf_init(TreeTableConf *conf)
-   72|    138|{
-   73|    138|    conf->mem_alloc  = malloc;
-   74|    138|    conf->mem_calloc = calloc;
-   75|    138|    conf->mem_free   = free;
-   76|    138|    conf->cmp        = cmp;
-   77|    138|}
+   72|     24|{
+   73|     24|    conf->mem_alloc  = malloc;
+   74|     24|    conf->mem_calloc = calloc;
+   75|     24|    conf->mem_free   = free;
+   76|     24|    conf->cmp        = cmp;
+   77|     24|}
    78|       |
    79|       |/**
    80|       | * Creates a new TreeTable and returns a status code.
@@ -87,11 +86,11 @@
    86|       | * allocation for the new TreeTable failed.
    87|       | */
    88|       |enum cc_stat treetable_new(TreeTable **tt)
-   89|    138|{
-   90|    138|    TreeTableConf conf;
-   91|    138|    treetable_conf_init(&conf);
-   92|    138|    return treetable_new_conf(&conf, tt);
-   93|    138|}
+   89|     24|{
+   90|     24|    TreeTableConf conf;
+   91|     24|    treetable_conf_init(&conf);
+   92|     24|    return treetable_new_conf(&conf, tt);
+   93|     24|}
    94|       |
    95|       |/**
    96|       | * Creates a new TreeTable based on the specified TreeTableConf struct and returns
@@ -107,32 +106,32 @@
   106|       | * allocation for the new TreeTable structure failed.
   107|       | */
   108|       |enum cc_stat treetable_new_conf(TreeTableConf const * const conf, TreeTable **tt)
-  109|    138|{
-  110|    138|    TreeTable *table = conf->mem_calloc(1, sizeof(TreeTable));
+  109|     24|{
+  110|     24|    TreeTable *table = conf->mem_calloc(1, sizeof(TreeTable));
   111|       |
-  112|    138|    if (!table)
+  112|     24|    if (!table)
   113|      0|        return CC_ERR_ALLOC;
   114|       |
-  115|    138|    RBNode *sentinel = conf->mem_calloc(1, sizeof(RBNode));
+  115|     24|    RBNode *sentinel = conf->mem_calloc(1, sizeof(RBNode));
   116|       |
-  117|    138|    if (!sentinel) {
+  117|     24|    if (!sentinel) {
   118|      0|        conf->mem_free(table);
   119|      0|        return CC_ERR_ALLOC;
   120|      0|    }
   121|       |
-  122|    138|    sentinel->color   = RB_BLACK;
+  122|     24|    sentinel->color   = RB_BLACK;
   123|       |
-  124|    138|    table->size       = 0;
-  125|    138|    table->cmp        = conf->cmp;
-  126|    138|    table->mem_alloc  = conf->mem_alloc;
-  127|    138|    table->mem_calloc = conf->mem_calloc;
-  128|    138|    table->mem_free   = conf->mem_free;
-  129|    138|    table->root       = sentinel;
-  130|    138|    table->sentinel   = sentinel;
+  124|     24|    table->size       = 0;
+  125|     24|    table->cmp        = conf->cmp;
+  126|     24|    table->mem_alloc  = conf->mem_alloc;
+  127|     24|    table->mem_calloc = conf->mem_calloc;
+  128|     24|    table->mem_free   = conf->mem_free;
+  129|     24|    table->root       = sentinel;
+  130|     24|    table->sentinel   = sentinel;
   131|       |
-  132|    138|    *tt = table;
-  133|    138|    return CC_OK;
-  134|    138|}
+  132|     24|    *tt = table;
+  133|     24|    return CC_OK;
+  134|     24|}
   135|       |
   136|       |/**
   137|       | * Destroys the sub-tree specified by the root node n.
@@ -141,17 +140,17 @@
   140|       | * @param[in] n root node of the sub tree that is being destroyed
   141|       | */
   142|       |static void tree_destroy(TreeTable *table, RBNode *n)
-  143|      0|{
-  144|      0|    if (n == table->sentinel)
-  145|      0|        return;
+  143|     18|{
+  144|     18|    if (n == table->sentinel)
+  145|     10|        return;
   146|       |
-  147|      0|    tree_destroy(table, n->left);
-  148|      0|    tree_destroy(table, n->right);
+  147|      8|    tree_destroy(table, n->left);
+  148|      8|    tree_destroy(table, n->right);
   149|       |
-  150|      0|    table->mem_free(n->key);    /* free the key   */
-  151|      0|    table->mem_free(n->value);  /* free the value */
-  152|      0|    table->mem_free(n);         /* free the node  */
-  153|      0|}
+  150|      8|    table->mem_free(n->key);    /* free the key   */
+  151|      8|    table->mem_free(n->value);  /* free the value */
+  152|      8|    table->mem_free(n);         /* free the node  */
+  153|      8|}
   154|       |
   155|       |/**
   156|       | * Destroys the specified TreeTable structure without destroying the the data
@@ -161,12 +160,12 @@
   160|       | * @param[in] table TreeTable to be destroyed.
   161|       | */
   162|       |void treetable_destroy(TreeTable *table)
-  163|      0|{
-  164|      0|    tree_destroy(table, table->root);
+  163|      2|{
+  164|      2|    tree_destroy(table, table->root);
   165|       |
-  166|      0|    table->mem_free(table->sentinel);
-  167|      0|    table->mem_free(table);
-  168|      0|}
+  166|      2|    table->mem_free(table->sentinel);
+  167|      2|    table->mem_free(table);
+  168|      2|}
   169|       |
   170|       |/**
   171|       | * Gets a value associated with the specified key and sets the out
@@ -221,16 +220,16 @@
   220|       | * @return CC_OK if the key was found, or CC_ERR_KEY_NOT_FOUND if not.
   221|       | */
   222|       |enum cc_stat treetable_get_greater_than(TreeTable const * const table, const void *key, void **out)
-  223|      2|{
-  224|      2|    RBNode *n = get_tree_node_by_key(table, key);
-  225|      2|    RBNode *s = get_successor_node(table, n);
+  223|     10|{
+  224|     10|    RBNode *n = get_tree_node_by_key(table, key);
+  225|     10|    RBNode *s = get_successor_node(table, n);
   226|       |
-  227|      2|    if (n && s) {
-  228|      2|        *out = s->key;
-  229|      2|        return CC_OK;
-  230|      2|    }
-  231|      0|    return CC_ERR_KEY_NOT_FOUND;
-  232|      2|}
+  227|     10|    if (n && s) {
+  228|      4|        *out = s->key;
+  229|      4|        return CC_OK;
+  230|      4|    }
+  231|      6|    return CC_ERR_KEY_NOT_FOUND;
+  232|     10|}
   233|       |
   234|       |/**
   235|       | * Returns the size of the specified TreeTable. Size of a TreeTable represents
@@ -299,48 +298,48 @@
   298|       | * allocation for the new element failed.
   299|       | */
   300|       |enum cc_stat treetable_add(TreeTable *table, void *key, void *val) // 6 Paths
-  301|    666|{
-  302|    666|    RBNode *y = table->sentinel;
-  303|    666|    RBNode *x = table->root;
+  301|     74|{
+  302|     74|    RBNode *y = table->sentinel;
+  303|     74|    RBNode *x = table->root;
   304|       |
-  305|    666|    int cmp;
-  306|  1.56k|    while (x != table->sentinel) {
-  307|    921|        cmp = table->cmp(key, x->key);
-  308|    921|        y   = x;
+  305|     74|    int cmp;
+  306|    144|    while (x != table->sentinel) {
+  307|     80|        cmp = table->cmp(key, x->key);
+  308|     80|        y   = x;
   309|       |
-  310|    921|        if (cmp < 0) {
-  311|    447|            x = x->left;
-  312|    474|        } else if (cmp > 0) {
-  313|    455|            x = x->right;
-  314|    455|        } else {
-  315|     19|            x->value = val;
-  316|     19|            return CC_OK;
-  317|     19|        }
-  318|    921|    }
-  319|    647|    RBNode *n = table->mem_alloc(sizeof(RBNode));
+  310|     80|        if (cmp < 0) {
+  311|     29|            x = x->left;
+  312|     51|        } else if (cmp > 0) {
+  313|     41|            x = x->right;
+  314|     41|        } else {
+  315|     10|            x->value = val;
+  316|     10|            return CC_OK;
+  317|     10|        }
+  318|     80|    }
+  319|     64|    RBNode *n = table->mem_alloc(sizeof(RBNode));
   320|       |
-  321|    647|    n->value  = val;
-  322|    647|    n->key    = key;
-  323|    647|    n->parent = y;
-  324|    647|    n->left   = table->sentinel;
-  325|    647|    n->right  = table->sentinel;
+  321|     64|    n->value  = val;
+  322|     64|    n->key    = key;
+  323|     64|    n->parent = y;
+  324|     64|    n->left   = table->sentinel;
+  325|     64|    n->right  = table->sentinel;
   326|       |
-  327|    647|    table->size++;
+  327|     64|    table->size++;
   328|       |
-  329|    647|    if (y == table->sentinel) {
-  330|    138|        table->root = n;
-  331|    138|        n->color    = RB_BLACK;
-  332|    509|    } else {
-  333|    509|        n->color = RB_RED;
-  334|    509|        if (table->cmp(key, y->key) < 0) {
-  335|    250|            y->left = n;
-  336|    259|        } else {
-  337|    259|            y->right = n;
-  338|    259|        }
-  339|    509|        rebalance_after_insert(table, n);
-  340|    509|    }
-  341|    647|    return CC_OK;
-  342|    666|}
+  329|     64|    if (y == table->sentinel) {
+  330|     24|        table->root = n;
+  331|     24|        n->color    = RB_BLACK;
+  332|     40|    } else {
+  333|     40|        n->color = RB_RED;
+  334|     40|        if (table->cmp(key, y->key) < 0) {
+  335|     15|            y->left = n;
+  336|     25|        } else {
+  337|     25|            y->right = n;
+  338|     25|        }
+  339|     40|        rebalance_after_insert(table, n);
+  340|     40|    }
+  341|     64|    return CC_OK;
+  342|     74|}
   343|       |
   344|       |/**
   345|       | * Rebalances the tale after an insert.
@@ -349,46 +348,46 @@
   348|       | * @param[in] z Node that was inserted
   349|       | */
   350|       |static void rebalance_after_insert(TreeTable *table, RBNode *z)
-  351|    509|{
-  352|    509|    RBNode *y;
+  351|     40|{
+  352|     40|    RBNode *y;
   353|       |
-  354|    772|    while (z->parent->color == RB_RED) {
-  355|    263|        if (z->parent == z->parent->parent->left) {
-  356|    130|            y = z->parent->parent->right;
-  357|    130|            if (y->color == RB_RED) {
-  358|     62|                z->parent->color         = RB_BLACK;
-  359|     62|                y->color                 = RB_BLACK;
-  360|     62|                z->parent->parent->color = RB_RED;
-  361|     62|                z = z->parent->parent;
-  362|     68|            } else {
-  363|     68|                if (z == z->parent->right) {
-  364|     33|                    z = z->parent;
-  365|     33|                    rotate_left(table, z);
-  366|     33|                }
-  367|     68|                z->parent->color         = RB_BLACK;
-  368|     68|                z->parent->parent->color = RB_RED;
-  369|     68|                rotate_right(table, z->parent->parent);
-  370|     68|            }
-  371|    133|        } else {
-  372|    133|            y = z->parent->parent->left;
-  373|    133|            if (y->color == RB_RED) {
-  374|     61|                z->parent->color         = RB_BLACK;
-  375|     61|                y->color                 = RB_BLACK;
-  376|     61|                z->parent->parent->color = RB_RED;
-  377|     61|                z = z->parent->parent;
-  378|     72|            } else {
-  379|     72|                if (z == z->parent->left) {
-  380|     32|                    z = z->parent;
-  381|     32|                    rotate_right(table, z);
-  382|     32|                }
-  383|     72|                z->parent->color         = RB_BLACK;
-  384|     72|                z->parent->parent->color = RB_RED;
-  385|     72|                rotate_left(table, z->parent->parent);
-  386|     72|            }
-  387|    133|        }
-  388|    263|    }
-  389|    509|    table->root->color = RB_BLACK;
-  390|    509|}
+  354|     59|    while (z->parent->color == RB_RED) {
+  355|     19|        if (z->parent == z->parent->parent->left) {
+  356|      7|            y = z->parent->parent->right;
+  357|      7|            if (y->color == RB_RED) {
+  358|      2|                z->parent->color         = RB_BLACK;
+  359|      2|                y->color                 = RB_BLACK;
+  360|      2|                z->parent->parent->color = RB_RED;
+  361|      2|                z = z->parent->parent;
+  362|      5|            } else {
+  363|      5|                if (z == z->parent->right) {
+  364|      2|                    z = z->parent;
+  365|      2|                    rotate_left(table, z);
+  366|      2|                }
+  367|      5|                z->parent->color         = RB_BLACK;
+  368|      5|                z->parent->parent->color = RB_RED;
+  369|      5|                rotate_right(table, z->parent->parent);
+  370|      5|            }
+  371|     12|        } else {
+  372|     12|            y = z->parent->parent->left;
+  373|     12|            if (y->color == RB_RED) {
+  374|      2|                z->parent->color         = RB_BLACK;
+  375|      2|                y->color                 = RB_BLACK;
+  376|      2|                z->parent->parent->color = RB_RED;
+  377|      2|                z = z->parent->parent;
+  378|     10|            } else {
+  379|     10|                if (z == z->parent->left) {
+  380|      1|                    z = z->parent;
+  381|      1|                    rotate_right(table, z);
+  382|      1|                }
+  383|     10|                z->parent->color         = RB_BLACK;
+  384|     10|                z->parent->parent->color = RB_RED;
+  385|     10|                rotate_left(table, z->parent->parent);
+  386|     10|            }
+  387|     12|        }
+  388|     19|    }
+  389|     40|    table->root->color = RB_BLACK;
+  390|     40|}
   391|       |
   392|       |static INLINE RBNode *tree_min(TreeTable const * const table, RBNode *n)
   393|      4|{
@@ -416,26 +415,26 @@
   415|       | * @param[in] x the node around which this operation is performed
   416|       | */
   417|       |static void rotate_right(TreeTable *table, RBNode *x)
-  418|    100|{
-  419|    100|    RBNode *y = x->left;
+  418|      6|{
+  419|      6|    RBNode *y = x->left;
   420|       |
-  421|    100|    x->left = y->right;
+  421|      6|    x->left = y->right;
   422|       |
-  423|    100|    if (y->right != table->sentinel)
+  423|      6|    if (y->right != table->sentinel)
   424|      0|        y->right->parent = x;
   425|       |
-  426|    100|    y->parent = x->parent;
+  426|      6|    y->parent = x->parent;
   427|       |
-  428|    100|    if (x->parent == table->sentinel)
-  429|     43|        table->root = y;
-  430|     57|    else if (x == x->parent->right)
-  431|     44|        x->parent->right = y;
-  432|     13|    else
-  433|     13|        x->parent->left = y;
+  428|      6|    if (x->parent == table->sentinel)
+  429|      4|        table->root = y;
+  430|      2|    else if (x == x->parent->right)
+  431|      1|        x->parent->right = y;
+  432|      1|    else
+  433|      1|        x->parent->left = y;
   434|       |
-  435|    100|    y->right  = x;
-  436|    100|    x->parent = y;
-  437|    100|}
+  435|      6|    y->right  = x;
+  436|      6|    x->parent = y;
+  437|      6|}
   438|       |
   439|       |/**
   440|       | * Performs a left rotation on the specified table's RB tree at root <code>
@@ -445,26 +444,26 @@
   444|       | * @param[in] x the node around which this operation is performed
   445|       | */
   446|       |static void rotate_left(TreeTable *table, RBNode *x)
-  447|    105|{
-  448|    105|    RBNode *y = x->right;
+  447|     12|{
+  448|     12|    RBNode *y = x->right;
   449|       |
-  450|    105|    x->right = y->left;
+  450|     12|    x->right = y->left;
   451|       |
-  452|    105|    if (y->left != table->sentinel)
+  452|     12|    if (y->left != table->sentinel)
   453|      0|        y->left->parent = x;
   454|       |
-  455|    105|    y->parent = x->parent;
+  455|     12|    y->parent = x->parent;
   456|       |
-  457|    105|    if (x->parent == table->sentinel)
-  458|     47|        table->root = y;
-  459|     58|    else if (x == x->parent->left)
-  460|     45|        x->parent->left = y;
-  461|     13|    else
-  462|     13|        x->parent->right = y;
+  457|     12|    if (x->parent == table->sentinel)
+  458|      8|        table->root = y;
+  459|      4|    else if (x == x->parent->left)
+  460|      2|        x->parent->left = y;
+  461|      2|    else
+  462|      2|        x->parent->right = y;
   463|       |
-  464|    105|    y->left   = x;
-  465|    105|    x->parent = y;
-  466|    105|}
+  464|     12|    y->left   = x;
+  465|     12|    x->parent = y;
+  466|     12|}
   467|       |
   468|       |/**
   469|       | * Returns a tree node associated with the specified key.
@@ -475,27 +474,27 @@
   474|       | * @return tree node associated with the key
   475|       | */
   476|       |static RBNode *get_tree_node_by_key(TreeTable const * const table, const void *key)
-  477|     36|{
-  478|     36|    if (table->size == 0)
+  477|     44|{
+  478|     44|    if (table->size == 0)
   479|      8|        return NULL;
   480|       |
-  481|     28|    RBNode *n = table->root;
-  482|     28|    RBNode *s = table->sentinel;
+  481|     36|    RBNode *n = table->root;
+  482|     36|    RBNode *s = table->sentinel;
   483|       |
-  484|     28|    int cmp;
-  485|     45|    do {
-  486|     45|        cmp = table->cmp(key, n->key);
+  484|     36|    int cmp;
+  485|     60|    do {
+  486|     60|        cmp = table->cmp(key, n->key);
   487|       |
-  488|     45|        if (cmp < 0)
-  489|     14|            n = n->left;
-  490|     31|        else if (cmp > 0)
-  491|      9|            n = n->right;
-  492|     22|        else
-  493|     22|            return n;
-  494|     45|    } while (n != s && cmp != 0);
+  488|     60|        if (cmp < 0)
+  489|     21|            n = n->left;
+  490|     39|        else if (cmp > 0)
+  491|     15|            n = n->right;
+  492|     24|        else
+  493|     24|            return n;
+  494|     60|    } while (n != s && cmp != 0);
   495|       |
-  496|      6|    return NULL;
-  497|     28|}
+  496|     12|    return NULL;
+  497|     36|}
   498|       |
   499|       |/**
   500|       | * Returns a successor node of the node <code>x</code>
@@ -506,2505 +505,65 @@
   505|       | * @return successor node of x
   506|       | */
   507|       |static RBNode *get_successor_node(TreeTable const * const table, RBNode *x)
-  508|      2|{
-  509|      2|    if (x == NULL)
-  510|      0|        return NULL;
+  508|     10|{
+  509|     10|    if (x == NULL)
+  510|      6|        return NULL;
   511|       |
-  512|      2|    if (x->right != table->sentinel)
+  512|      4|    if (x->right != table->sentinel)
   513|      1|        return tree_min(table, x->right);
   514|       |
-  515|      1|    RBNode *y = x->parent;
+  515|      3|    RBNode *y = x->parent;
   516|       |
-  517|      1|    while (y != table->sentinel && x == y->right) {
+  517|      3|    while (y != table->sentinel && x == y->right) {
   518|      0|        x = y;
   519|      0|        y = y->parent;
   520|      0|    }
-  521|      1|    return y;
-  522|      2|}
+  521|      3|    return y;
+  522|      4|}
   523|       |
-  524|  4.48k|static int check_height(TreeTable *t, RBNode *n) {
-  525|  4.48k|    if (n == t->sentinel)
-  526|  2.56k|        return 0;
+  524|    320|static int check_height(TreeTable *t, RBNode *n) {
+  525|    320|    if (n == t->sentinel)
+  526|    187|        return 0;
   527|       |
-  528|  1.91k|    int hl = check_height(t, n->left);
-  529|  1.91k|    if (hl == -1)
+  528|    133|    int hl = check_height(t, n->left);
+  529|    133|    if (hl == -1)
   530|      0|        return -1;
   531|       |
-  532|  1.91k|    int hr = check_height(t, n->right);
-  533|  1.91k|    if (hr == -1)
+  532|    133|    int hr = check_height(t, n->right);
+  533|    133|    if (hr == -1)
   534|      0|        return -1;
   535|       |
-  536|  1.91k|    if (hl - hr > 1 || hr - hl > 1) // means unbalanced tree
+  536|    133|    if (hl - hr > 1 || hr - hl > 1) // means unbalanced tree
   537|      0|        return -1;
   538|       |
-  539|  1.91k|    return (hl > hr ? hl : hr) + 1;
-  540|  1.91k|}
+  539|    133|    return (hl > hr ? hl : hr) + 1;
+  540|    133|}
   541|       |
-  542|    652|int balanced(TreeTable *t) {
-  543|    652|    if (!t)
+  542|     54|int balanced(TreeTable *t) {
+  543|     54|    if (!t)
   544|      0|        return 1;
   545|       |
-  546|    652|    return check_height(t, t->root) != -1;
-  547|    652|}
+  546|     54|    return check_height(t, t->root) != -1;
+  547|     54|}
   548|       |
   549|       |
-  550|  4.48k|static int is_sorted_rec(TreeTable *t, RBNode *n, int min, int max) {
-  551|  4.48k|    if (n == t->sentinel)
-  552|  2.56k|        return 1;
+  550|    320|static int is_sorted_rec(TreeTable *t, RBNode *n, int min, int max) {
+  551|    320|    if (n == t->sentinel)
+  552|    187|        return 1;
   553|       |
-  554|  1.91k|    int key = *((int *)n->key);
+  554|    133|    int key = *((int *)n->key);
   555|       |
-  556|  1.91k|    if (key <= min || key >= max)
+  556|    133|    if (key <= min || key >= max)
   557|      0|        return 0;
   558|       |
-  559|  1.91k|    return is_sorted_rec(t, n->left, min, key) &&
-  560|  1.91k|           is_sorted_rec(t, n->right, key, max);
-  561|  1.91k|}
+  559|    133|    return is_sorted_rec(t, n->left, min, key) &&
+  560|    133|           is_sorted_rec(t, n->right, key, max);
+  561|    133|}
   562|       |
-  563|    652|int sorted(TreeTable *t) {
-  564|    652|    if (!t)
+  563|     54|int sorted(TreeTable *t) {
+  564|     54|    if (!t)
   565|      0|        return 1;
   566|       |
-  567|    652|    return is_sorted_rec(t, t->root, INT_MIN, INT_MAX);
-  568|    652|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_contains_key.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from: test_contains_key.c
-    3|       | * Property: contains_key correctness.
-    4|       | *   (a) A key that has been inserted must be found by treetable_contains_key.
-    5|       | *   (b) A key that has never been inserted must NOT be found.
-    6|       | *   (c) After a duplicate/update insert, the key is still found
-    7|       | *       (update must not remove the node).
-    8|       | *
-    9|       | * Generated from KLEE ktest files:
-   10|       | *   test000001.ktest : k1=-2130706432, k2=0
-   11|       | *   test000002.ktest : k1=16777216,    k2=0
-   12|       | */
-   13|       |
-   14|       |#include <assert.h>
-   15|       |#include "treetable.h"
-   16|       |
-   17|       |static void test_case_1(void)
-   18|      1|{
-   19|       |    /* KLEE test000001: k1=-2130706432, k2=0 */
-   20|      1|    int k1 = -2130706432;
-   21|      1|    int k2 = 0;
-   22|      1|    int v1 = 7, v1b = 77;
-   23|       |
-   24|      1|    TreeTable *t;
-   25|      1|    treetable_new(&t);
-   26|       |
-   27|       |    /* (b) before any insert, neither key is present */
-   28|      1|    assert(!treetable_contains_key(t, &k1));
-   29|      1|    assert(!treetable_contains_key(t, &k2));
-   30|       |
-   31|      1|    treetable_add(t, &k1, &v1);
-   32|      1|    assert(balanced(t) && sorted(t));
-   33|       |
-   34|       |    /* (a) k1 is now present */
-   35|      1|    assert(treetable_contains_key(t, &k1));
-   36|       |
-   37|       |    /* (b) k2 was never inserted */
-   38|      1|    assert(!treetable_contains_key(t, &k2));
-   39|       |
-   40|       |    /* (c) update does not remove k1 */
-   41|      1|    treetable_add(t, &k1, &v1b);
-   42|      1|    assert(treetable_contains_key(t, &k1));
-   43|       |
-   44|      1|    assert(balanced(t) && sorted(t));
-   45|       |
-   46|       |
-   47|      1|}
-   48|       |
-   49|       |static void test_case_2(void)
-   50|      1|{
-   51|       |    /* KLEE test000002: k1=16777216, k2=0 */
-   52|      1|    int k1 = 16777216;
-   53|      1|    int k2 = 0;
-   54|      1|    int v1 = 7, v1b = 77;
-   55|       |
-   56|      1|    TreeTable *t;
-   57|      1|    treetable_new(&t);
-   58|       |
-   59|      1|    assert(!treetable_contains_key(t, &k1));
-   60|      1|    assert(!treetable_contains_key(t, &k2));
-   61|       |
-   62|      1|    treetable_add(t, &k1, &v1);
-   63|      1|    assert(balanced(t) && sorted(t));
-   64|       |
-   65|      1|    assert(treetable_contains_key(t, &k1));
-   66|      1|    assert(!treetable_contains_key(t, &k2));
-   67|       |
-   68|      1|    treetable_add(t, &k1, &v1b);
-   69|      1|    assert(treetable_contains_key(t, &k1));
-   70|       |
-   71|      1|    assert(balanced(t) && sorted(t));
-   72|       |
-   73|       |
-   74|      1|}
-   75|       |
-   76|       |int main(void)
-   77|      4|{
-   78|      4|    test_case_1();
-   79|      4|    test_case_2();
-   80|      4|    return 0;
-   81|      4|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_get_correctness.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from: test_get_correctness.c
-    3|       | * Property: Lookup correctness.
-    4|       | *   (a) After inserting key k with value v, treetable_get must return CC_OK
-    5|       | *       and the retrieved value must equal v.
-    6|       | *   (b) For a key never inserted, treetable_get must return CC_ERR_KEY_NOT_FOUND
-    7|       | *       (empty-table early-exit and populated-table do-while exhaustion paths).
-    8|       | *   (c) After updating k1 with a new value, treetable_get must return the
-    9|       | *       updated value.
-   10|       | *   (d) Read-only treetable_get must not mutate the table size.
-   11|       | *
-   12|       | * Generated from KLEE ktest files:
-   13|       | *   test000001.ktest : k1=-2130706432, k2=-1073741824, k3=16777216,  absent=0
-   14|       | *   test000002.ktest : k1=256,         k2=65536,       k3=16777216,  absent=0
-   15|       | *   test000003.ktest : k1=0,           k2=65536,       k3=65537,     absent=16777216
-   16|       | *   test000004.ktest : k1=0,           k2=33554432,    k3=33554560,  absent=16777216
-   17|       | */
-   18|       |
-   19|       |#include <assert.h>
-   20|       |#include "treetable.h"
-   21|       |
-   22|       |static void run_case(int k1, int k2, int k3, int absent)
-   23|      4|{
-   24|      4|    int v1 = 10, v2 = 20, v3 = 30, v1_new = 99;
-   25|      4|    void *out = NULL;
-   26|       |
-   27|      4|    TreeTable *t;
-   28|      4|    treetable_new(&t);
-   29|       |
-   30|       |    /* (b) empty table — size==0 early-exit path */
-   31|      4|    assert(treetable_get(t, &k1, &out) == CC_ERR_KEY_NOT_FOUND);
-   32|       |
-   33|      4|    treetable_add(t, &k1, &v1);
-   34|      4|    treetable_add(t, &k2, &v2);
-   35|      4|    treetable_add(t, &k3, &v3);
-   36|      4|    assert(balanced(t) && sorted(t));
-   37|      4|    assert(treetable_size(t) == 3);
-   38|       |
-   39|       |    /* (a) all three keys found with correct values */
-   40|      4|    out = NULL;
-   41|      4|    assert(treetable_get(t, &k1, &out) == CC_OK);
-   42|      4|    assert(out == &v1);
-   43|       |
-   44|      4|    out = NULL;
-   45|      4|    assert(treetable_get(t, &k2, &out) == CC_OK);
-   46|      4|    assert(out == &v2);
-   47|       |
-   48|      4|    out = NULL;
-   49|      4|    assert(treetable_get(t, &k3, &out) == CC_OK);
-   50|      4|    assert(out == &v3);
-   51|       |
-   52|       |    /* (b) absent key on populated table */
-   53|      4|    out = NULL;
-   54|      4|    assert(treetable_get(t, &absent, &out) == CC_ERR_KEY_NOT_FOUND);
-   55|       |
-   56|       |    /* (d) size unchanged after read-only calls */
-   57|      4|    assert(treetable_size(t) == 3);
-   58|       |
-   59|       |    /* (c) after update, get returns the new value */
-   60|      4|    treetable_add(t, &k1, &v1_new);
-   61|      4|    assert(balanced(t) && sorted(t));
-   62|      4|    out = NULL;
-   63|      4|    assert(treetable_get(t, &k1, &out) == CC_OK);
-   64|      4|    assert(out == &v1_new);
-   65|       |
-   66|       |    /* size stays 3 after an update (not a new key) */
-   67|      4|    assert(treetable_size(t) == 3);
-   68|       |
-   69|       |
-   70|      4|}
-   71|       |
-   72|       |int main(void)
-   73|      4|{
-   74|       |    /* test000001 */
-   75|      4|    run_case(-2130706432, -1073741824, 16777216, 0);
-   76|       |    /* test000002 */
-   77|      4|    run_case(256, 65536, 16777216, 0);
-   78|       |    /* test000003 */
-   79|      4|    run_case(0, 65536, 65537, 16777216);
-   80|       |    /* test000004 */
-   81|      4|    run_case(0, 33554432, 33554560, 16777216);
-   82|       |
-   83|      4|    return 0;
-   84|      4|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_get_first_key.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from: test_get_first_key.c
-    3|       | * Property: get_first_key correctness.
-    4|       | *   (b) After inserting a single key k, get_first_key must return k.
-    5|       | *   (c) After inserting two distinct keys, get_first_key must return the
-    6|       | *       smaller one regardless of insertion order.
-    7|       | *   (d) After inserting four keys in descending order, the minimum key
-    8|       | *       is a deep left leaf; tree_min must walk multiple left pointers.
-    9|       | *
-   10|       | * NOTE: The empty-table case is in test_get_first_key_empty.c because
-   11|       | * it triggers a null-page-access bug (BUG-002).
-   12|       | *
-   13|       | * Generated from KLEE ktest files:
-   14|       | *   test000001.ktest : k1=0, k2=16777216, k3=16777472, k4=16793600
-   15|       | */
-   16|       |
-   17|       |#include <assert.h>
-   18|       |#include "treetable.h"
-   19|       |
-   20|       |int main(void)
-   21|      1|{
-   22|      1|    int k1 = 0;
-   23|      1|    int k2 = 16777216;
-   24|      1|    int k3 = 16777472;
-   25|      1|    int k4 = 16793600;
-   26|      1|    int v1=1, v2=2, v3=3, v4=4;
-   27|      1|    void *out = NULL;
-   28|       |
-   29|       |    /* ---- (b) single key ---- */
-   30|      1|    TreeTable *t1;
-   31|      1|    treetable_new(&t1);
-   32|      1|    treetable_add(t1, &k1, &v1);
-   33|      1|    assert(balanced(t1) && sorted(t1));
-   34|      1|    out = NULL;
-   35|      1|    assert(treetable_get_first_key(t1, &out) == CC_OK);
-   36|      1|    assert(*(int *)out == k1);
-   37|       |
-   38|       |
-   39|       |    /* ---- (c) two keys: first key must be the minimum ---- */
-   40|      1|    TreeTable *t2;
-   41|      1|    treetable_new(&t2);
-   42|      1|    treetable_add(t2, &k2, &v2);
-   43|      1|    treetable_add(t2, &k1, &v1);
-   44|      1|    assert(balanced(t2) && sorted(t2));
-   45|      1|    out = NULL;
-   46|      1|    assert(treetable_get_first_key(t2, &out) == CC_OK);
-   47|      1|    assert(*(int *)out == k1);
-   48|       |
-   49|       |
-   50|       |    /* ---- (d) four keys descending: min is a deep left leaf ---- */
-   51|      1|    TreeTable *t4;
-   52|      1|    treetable_new(&t4);
-   53|      1|    treetable_add(t4, &k4, &v4);
-   54|      1|    treetable_add(t4, &k3, &v3);
-   55|      1|    treetable_add(t4, &k2, &v2);
-   56|      1|    treetable_add(t4, &k1, &v1);
-   57|      1|    assert(balanced(t4) && sorted(t4));
-   58|      1|    out = NULL;
-   59|      1|    assert(treetable_get_first_key(t4, &out) == CC_OK);
-   60|      1|    assert(*(int *)out == k1);
-   61|       |
-   62|       |
-   63|      1|    return 0;
-   64|      1|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_get_greater_than_exact.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from: test_get_greater_than_exact.c
-    3|       | * Property: get_greater_than returns the IMMEDIATE successor, not just
-    4|       | *           any key greater than the queried one.
-    5|       | *
-    6|       | * With keys k1 < k2 < k3, querying get_greater_than(k1) must return
-    7|       | * exactly k2, and get_greater_than(k2) must return exactly k3.
-    8|       | *
-    9|       | * Generated from KLEE ktest files:
-   10|       | *   test000001.ktest : k1=0, k2=128, k3=16384
-   11|       | */
-   12|       |
-   13|       |#include <assert.h>
-   14|       |#include "treetable.h"
-   15|       |
-   16|       |int main(void)
-   17|      1|{
-   18|      1|    int k1 = 0;
-   19|      1|    int k2 = 128;
-   20|      1|    int k3 = 16384;
-   21|      1|    int v1=1, v2=2, v3=3;
-   22|      1|    void *out = NULL;
-   23|       |
-   24|      1|    TreeTable *t;
-   25|      1|    treetable_new(&t);
-   26|      1|    treetable_add(t, &k1, &v1);
-   27|      1|    treetable_add(t, &k2, &v2);
-   28|      1|    treetable_add(t, &k3, &v3);
-   29|      1|    assert(balanced(t) && sorted(t));
-   30|       |
-   31|       |    /* successor of k1 must be exactly k2, not k3 */
-   32|      1|    out = NULL;
-   33|      1|    assert(treetable_get_greater_than(t, &k1, &out) == CC_OK);
-   34|      1|    assert(*(int *)out == k2);
-   35|       |
-   36|       |    /* successor of k2 must be exactly k3 */
-   37|      1|    out = NULL;
-   38|      1|    assert(treetable_get_greater_than(t, &k2, &out) == CC_OK);
-   39|      1|    assert(*(int *)out == k3);
-   40|       |
-   41|       |
-   42|      1|    return 0;
-   43|      1|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_size_correctness.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from: test_size_correctness.c
-    3|       | * Property: Size correctness.
-    4|       | *   (a) A fresh table has size 0.
-    5|       | *   (b) Inserting a new key increments size by 1.
-    6|       | *   (c) Inserting a duplicate key (update) does NOT change the size.
-    7|       | *
-    8|       | * Generated from KLEE ktest files:
-    9|       | *   test000001.ktest : k1=-2130706432, k2=0
-   10|       | *   test000002.ktest : k1=16777216,    k2=0
-   11|       | */
-   12|       |
-   13|       |#include <assert.h>
-   14|       |#include "treetable.h"
-   15|       |
-   16|       |static void run_case(int k1, int k2)
-   17|      2|{
-   18|      2|    int v1 = 1, v2 = 2, v1b = 99;
-   19|       |
-   20|      2|    TreeTable *t;
-   21|      2|    treetable_new(&t);
-   22|       |
-   23|       |    /* (a) fresh table */
-   24|      2|    assert(treetable_size(t) == 0);
-   25|       |
-   26|       |    /* (b) new key increases size */
-   27|      2|    treetable_add(t, &k1, &v1);
-   28|      2|    assert(balanced(t) && sorted(t));
-   29|      2|    assert(treetable_size(t) == 1);
-   30|       |
-   31|      2|    treetable_add(t, &k2, &v2);
-   32|      2|    assert(balanced(t) && sorted(t));
-   33|      2|    assert(treetable_size(t) == 2);
-   34|       |
-   35|       |    /* (c) duplicate key: size must stay the same */
-   36|      2|    treetable_add(t, &k1, &v1b);
-   37|      2|    assert(balanced(t) && sorted(t));
-   38|      2|    assert(treetable_size(t) == 2);
-   39|       |
-   40|       |
-   41|      2|}
-   42|       |
-   43|       |int main(void)
-   44|      4|{
-   45|       |    /* test000001 */
-   46|      4|    run_case(-2130706432, 0);
-   47|       |    /* test000002 */
-   48|      4|    run_case(16777216, 0);
-   49|      4|    return 0;
-   50|      4|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_validity_multi_add.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from: test_validity_multi_add.c
-    3|       | * Property: Validity preservation after multiple insertions, including
-    4|       | *           a duplicate key update, in both ascending and descending order.
-    5|       | *
-    6|       | *   (A) Keys inserted in ascending order — forces right-heavy growth and
-    7|       | *       left-rotations inside rebalance_after_insert (R-R cases).
-    8|       | *   (B) Keys inserted in descending order — forces left-heavy growth and
-    9|       | *       right-rotations (L-L cases).
-   10|       | *
-   11|       | * Generated from KLEE ktest files:
-   12|       | *   test000001.ktest :
-   13|       | *     a1=0, a2=16777216, a3=33554432, a4=33554560, a5=33570816
-   14|       | *     b1=0, b2=16777216, b3=33554432, b4=33554560, b5=33570816
-   15|       | */
-   16|       |
-   17|       |#include <assert.h>
-   18|       |#include "treetable.h"
-   19|       |
-   20|       |int main(void)
-   21|      1|{
-   22|       |    /* ---- Table A: ascending insertion ---- */
-   23|      1|    int a1 = 0;
-   24|      1|    int a2 = 16777216;
-   25|      1|    int a3 = 33554432;
-   26|      1|    int a4 = 33554560;
-   27|      1|    int a5 = 33570816;
-   28|      1|    int va = 1, vdup_a = 99;
-   29|       |
-   30|      1|    TreeTable *ta;
-   31|      1|    treetable_new(&ta);
-   32|       |
-   33|      1|    treetable_add(ta, &a1, &va); assert(balanced(ta) && sorted(ta));
-   34|      1|    treetable_add(ta, &a2, &va); assert(balanced(ta) && sorted(ta));
-   35|      1|    treetable_add(ta, &a3, &va); assert(balanced(ta) && sorted(ta));
-   36|      1|    treetable_add(ta, &a4, &va); assert(balanced(ta) && sorted(ta));
-   37|      1|    treetable_add(ta, &a5, &va); assert(balanced(ta) && sorted(ta));
-   38|       |
-   39|       |    /* duplicate/update: re-insert middle key with a different value */
-   40|      1|    treetable_add(ta, &a3, &vdup_a);
-   41|      1|    assert(balanced(ta) && sorted(ta));
-   42|       |
-   43|       |
-   44|       |
-   45|       |    /* ---- Table B: descending insertion ---- */
-   46|      1|    int b1 = 0;
-   47|      1|    int b2 = 16777216;
-   48|      1|    int b3 = 33554432;
-   49|      1|    int b4 = 33554560;
-   50|      1|    int b5 = 33570816;
-   51|      1|    int vb = 2, vdup_b = 88;
-   52|       |
-   53|      1|    TreeTable *tb;
-   54|      1|    treetable_new(&tb);
-   55|       |
-   56|       |    /* insert in descending value order: b5, b4, b3, b2, b1 */
-   57|      1|    treetable_add(tb, &b5, &vb); assert(balanced(tb) && sorted(tb));
-   58|      1|    treetable_add(tb, &b4, &vb); assert(balanced(tb) && sorted(tb));
-   59|      1|    treetable_add(tb, &b3, &vb); assert(balanced(tb) && sorted(tb));
-   60|      1|    treetable_add(tb, &b2, &vb); assert(balanced(tb) && sorted(tb));
-   61|      1|    treetable_add(tb, &b1, &vb); assert(balanced(tb) && sorted(tb));
-   62|       |
-   63|       |    /* duplicate/update: re-insert middle key with a different value */
-   64|      1|    treetable_add(tb, &b3, &vdup_b);
-   65|      1|    assert(balanced(tb) && sorted(tb));
-   66|       |
-   67|       |
-   68|      1|    return 0;
-   69|      1|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_validity_single_add.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from: test_validity_zigzag_insert.c
-    3|       | * Property: Validity preservation after a Left-Right zigzag insertion pattern.
-    4|       | *
-    5|       | * Insertion order k3, k1, k2 with k1 < k2 < k3 forces a Left-Right double
-    6|       | * rotation inside rebalance_after_insert, exercising the zigzag (LR) case
-    7|       | * of the RB-tree rebalancer.
-    8|       | *
-    9|       | * Generated from KLEE ktest files:
-   10|       | *   test000001.ktest : k1=0, k2=486539265, k3=553648384
-   11|       | */
-   12|       |
-   13|       |#include <assert.h>
-   14|       |#include "treetable.h"
-   15|       |
-   16|       |int main(void)
-   17|      1|{
-   18|      1|    int k1 = 0;
-   19|      1|    int k2 = 486539265;
-   20|      1|    int k3 = 553648384;
-   21|      1|    int v = 1;
-   22|       |
-   23|      1|    TreeTable *t;
-   24|      1|    treetable_new(&t);
-   25|       |
-   26|       |    /* Insert in zigzag order: k3, k1, k2 */
-   27|      1|    treetable_add(t, &k3, &v);
-   28|      1|    assert(balanced(t));
-   29|      1|    assert(sorted(t));
-   30|       |
-   31|      1|    treetable_add(t, &k1, &v);
-   32|      1|    assert(balanced(t));
-   33|      1|    assert(sorted(t));
-   34|       |
-   35|      1|    treetable_add(t, &k2, &v);
-   36|      1|    assert(balanced(t));
-   37|      1|    assert(sorted(t));
-   38|       |
-   39|       |
-   40|      1|    return 0;
-   41|      1|}
-
-/Users/tecnico/Documents/MEIC-25_26_P4/TVS/Project/TVS_2026/ex3/Ex3ConcTestSuite/test_validity_zigzag_insert.c:
-    1|       |/*
-    2|       | * Concrete test suite derived from KLEE symbolic execution.
-    3|       | * Source symbolic test: test_validity_zigzag_insert.c
-    4|       | * Property: balanced+sorted after zigzag insertion (covers L-R and R-L rotations)
-    5|       | *
-    6|       | * Each test_N() function replays the API call sequence with the concrete
-    7|       | * values assigned by KLEE for that execution path.
-    8|       | *
-    9|       | * Build:
-   10|       | *   clang -I../../TreeTable -fprofile-instr-generate -fcoverage-mapping \
-   11|       | *         test_validity_zigzag_insert.c ../../TreeTable/treetable.c -o test_validity_zigzag_insert
-   12|       | * Run:
-   13|       | *   ./test_validity_zigzag_insert
-   14|       | */
-   15|       |
-   16|       |#include <assert.h>
-   17|       |#include <stdio.h>
-   18|       |#include "treetable.h"
-   19|       |
-   20|       |/* test_1: k1=0, k2=0, k3=0, k4=0, k5=0
-   21|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-   22|       |static void test_1(void)
-   23|      1|{
-   24|      1|    int k1=0,k2=0,k3=0,k4=0,k5=0;
-   25|      1|    int v=1;
-   26|      1|    TreeTable *t; treetable_new(&t);
-   27|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-   28|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-   29|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-   30|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-   31|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-   32|       |
-   33|      1|}
-   34|       |
-   35|       |/* test_2: k1=16777216, k2=0, k3=0, k4=0, k5=0
-   36|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-   37|       |static void test_2(void)
-   38|      1|{
-   39|      1|    int k1=16777216,k2=0,k3=0,k4=0,k5=0;
-   40|      1|    int v=1;
-   41|      1|    TreeTable *t; treetable_new(&t);
-   42|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-   43|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-   44|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-   45|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-   46|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-   47|       |
-   48|      1|}
-   49|       |
-   50|       |/* test_3: k1=16777216, k2=50331648, k3=0, k4=0, k5=0
-   51|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-   52|       |static void test_3(void)
-   53|      1|{
-   54|      1|    int k1=16777216,k2=50331648,k3=0,k4=0,k5=0;
-   55|      1|    int v=1;
-   56|      1|    TreeTable *t; treetable_new(&t);
-   57|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-   58|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-   59|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-   60|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-   61|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-   62|       |
-   63|      1|}
-   64|       |
-   65|       |/* test_4: k1=-2147483640, k2=-2147483642, k3=-1879048175, k4=-1928591359, k5=0
-   66|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-   67|       |static void test_4(void)
-   68|      1|{
-   69|      1|    int k1=-2147483640,k2=-2147483642,k3=-1879048175,k4=-1928591359,k5=0;
-   70|      1|    int v=1;
-   71|      1|    TreeTable *t; treetable_new(&t);
-   72|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-   73|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-   74|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-   75|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-   76|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-   77|       |
-   78|      1|}
-   79|       |
-   80|       |/* test_5: k1=-1358954496, k2=0, k3=-536870912, k4=-687900745, k5=16777216
-   81|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-   82|       |static void test_5(void)
-   83|      1|{
-   84|      1|    int k1=-1358954496,k2=0,k3=-536870912,k4=-687900745,k5=16777216;
-   85|      1|    int v=1;
-   86|      1|    TreeTable *t; treetable_new(&t);
-   87|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-   88|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-   89|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-   90|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-   91|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-   92|       |
-   93|      1|}
-   94|       |
-   95|       |/* test_6: k1=-2130706432, k2=16777408, k3=16777216, k4=0, k5=16777375
-   96|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-   97|       |static void test_6(void)
-   98|      1|{
-   99|      1|    int k1=-2130706432,k2=16777408,k3=16777216,k4=0,k5=16777375;
-  100|      1|    int v=1;
-  101|      1|    TreeTable *t; treetable_new(&t);
-  102|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  103|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  104|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  105|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  106|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  107|       |
-  108|      1|}
-  109|       |
-  110|       |/* test_7: k1=-2140141551, k2=-2139095040, k3=-2139095039, k4=-2147481582, k5=0
-  111|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  112|       |static void test_7(void)
-  113|      1|{
-  114|      1|    int k1=-2140141551,k2=-2139095040,k3=-2139095039,k4=-2147481582,k5=0;
-  115|      1|    int v=1;
-  116|      1|    TreeTable *t; treetable_new(&t);
-  117|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  118|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  119|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  120|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  121|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  122|       |
-  123|      1|}
-  124|       |
-  125|       |/* test_8: k1=520093696, k2=671088640, k3=536870912, k4=0, k5=939524096
-  126|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  127|       |static void test_8(void)
-  128|      1|{
-  129|      1|    int k1=520093696,k2=671088640,k3=536870912,k4=0,k5=939524096;
-  130|      1|    int v=1;
-  131|      1|    TreeTable *t; treetable_new(&t);
-  132|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  133|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  134|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  135|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  136|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  137|       |
-  138|      1|}
-  139|       |
-  140|       |/* test_9: k1=-1073741822, k2=276861015, k3=-1056964608, k4=-2139095040, k5=0
-  141|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  142|       |static void test_9(void)
-  143|      1|{
-  144|      1|    int k1=-1073741822,k2=276861015,k3=-1056964608,k4=-2139095040,k5=0;
-  145|      1|    int v=1;
-  146|      1|    TreeTable *t; treetable_new(&t);
-  147|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  148|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  149|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  150|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  151|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  152|       |
-  153|      1|}
-  154|       |
-  155|       |/* test_10: k1=-2147483640, k2=-2147483646, k3=-1879044095, k4=-2147483642, k5=0
-  156|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  157|       |static void test_10(void)
-  158|      1|{
-  159|      1|    int k1=-2147483640,k2=-2147483646,k3=-1879044095,k4=-2147483642,k5=0;
-  160|      1|    int v=1;
-  161|      1|    TreeTable *t; treetable_new(&t);
-  162|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  163|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  164|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  165|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  166|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  167|       |
-  168|      1|}
-  169|       |
-  170|       |/* test_11: k1=-1342123456, k2=-1409286144, k3=-1326399995, k4=-50331648, k5=0
-  171|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  172|       |static void test_11(void)
-  173|      1|{
-  174|      1|    int k1=-1342123456,k2=-1409286144,k3=-1326399995,k4=-50331648,k5=0;
-  175|      1|    int v=1;
-  176|      1|    TreeTable *t; treetable_new(&t);
-  177|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  178|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  179|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  180|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  181|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  182|       |
-  183|      1|}
-  184|       |
-  185|       |/* test_12: k1=-2144335587, k2=-2139095040, k3=-2139095039, k4=-2143285758, k5=0
-  186|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  187|       |static void test_12(void)
-  188|      1|{
-  189|      1|    int k1=-2144335587,k2=-2139095040,k3=-2139095039,k4=-2143285758,k5=0;
-  190|      1|    int v=1;
-  191|      1|    TreeTable *t; treetable_new(&t);
-  192|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  193|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  194|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  195|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  196|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  197|       |
-  198|      1|}
-  199|       |
-  200|       |/* test_13: k1=-2147421957, k2=-2130706432, k3=-1862270976, k4=-1912602624, k5=0
-  201|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  202|       |static void test_13(void)
-  203|      1|{
-  204|      1|    int k1=-2147421957,k2=-2130706432,k3=-1862270976,k4=-1912602624,k5=0;
-  205|      1|    int v=1;
-  206|      1|    TreeTable *t; treetable_new(&t);
-  207|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  208|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  209|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  210|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  211|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  212|       |
-  213|      1|}
-  214|       |
-  215|       |/* test_14: k1=-2131976834, k2=-2130706432, k3=-1876951040, k4=-16777216, k5=0
-  216|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  217|       |static void test_14(void)
-  218|      1|{
-  219|      1|    int k1=-2131976834,k2=-2130706432,k3=-1876951040,k4=-16777216,k5=0;
-  220|      1|    int v=1;
-  221|      1|    TreeTable *t; treetable_new(&t);
-  222|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  223|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  224|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  225|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  226|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  227|       |
-  228|      1|}
-  229|       |
-  230|       |/* test_15: k1=-1895763717, k2=-1895825408, k3=-1862270976, k4=-1912602624, k5=0
-  231|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  232|       |static void test_15(void)
-  233|      1|{
-  234|      1|    int k1=-1895763717,k2=-1895825408,k3=-1862270976,k4=-1912602624,k5=0;
-  235|      1|    int v=1;
-  236|      1|    TreeTable *t; treetable_new(&t);
-  237|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  238|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  239|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  240|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  241|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  242|       |
-  243|      1|}
-  244|       |
-  245|       |/* test_16: k1=-2147422089, k2=33554432, k3=-2130706432, k4=0, k5=16777216
-  246|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  247|       |static void test_16(void)
-  248|      1|{
-  249|      1|    int k1=-2147422089,k2=33554432,k3=-2130706432,k4=0,k5=16777216;
-  250|      1|    int v=1;
-  251|      1|    TreeTable *t; treetable_new(&t);
-  252|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  253|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  254|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  255|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  256|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  257|       |
-  258|      1|}
-  259|       |
-  260|       |/* test_17: k1=-2130706349, k2=-1946157056, k3=-1879048191, k4=285212672, k5=268435456
-  261|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  262|       |static void test_17(void)
-  263|      1|{
-  264|      1|    int k1=-2130706349,k2=-1946157056,k3=-1879048191,k4=285212672,k5=268435456;
-  265|      1|    int v=1;
-  266|      1|    TreeTable *t; treetable_new(&t);
-  267|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  268|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  269|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  270|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  271|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  272|       |
-  273|      1|}
-  274|       |
-  275|       |/* test_18: k1=-2139095040, k2=-2147422085, k3=-2130706432, k4=16777216, k5=0
-  276|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  277|       |static void test_18(void)
-  278|      1|{
-  279|      1|    int k1=-2139095040,k2=-2147422085,k3=-2130706432,k4=16777216,k5=0;
-  280|      1|    int v=1;
-  281|      1|    TreeTable *t; treetable_new(&t);
-  282|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  283|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  284|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  285|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  286|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  287|       |
-  288|      1|}
-  289|       |
-  290|       |/* test_19: k1=-1879027543, k2=-1073680129, k3=-1862270976, k4=0, k5=-1056964608
-  291|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  292|       |static void test_19(void)
-  293|      1|{
-  294|      1|    int k1=-1879027543,k2=-1073680129,k3=-1862270976,k4=0,k5=-1056964608;
-  295|      1|    int v=1;
-  296|      1|    TreeTable *t; treetable_new(&t);
-  297|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  298|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  299|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  300|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  301|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  302|       |
-  303|      1|}
-  304|       |
-  305|       |/* test_20: k1=50331840, k2=50331896, k3=33554432, k4=16777216, k5=0
-  306|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  307|       |static void test_20(void)
-  308|      1|{
-  309|      1|    int k1=50331840,k2=50331896,k3=33554432,k4=16777216,k5=0;
-  310|      1|    int v=1;
-  311|      1|    TreeTable *t; treetable_new(&t);
-  312|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  313|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  314|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  315|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  316|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  317|       |
-  318|      1|}
-  319|       |
-  320|       |/* test_21: k1=1644167168, k2=1308622848, k3=1627389952, k4=0, k5=232
-  321|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  322|       |static void test_21(void)
-  323|      1|{
-  324|      1|    int k1=1644167168,k2=1308622848,k3=1627389952,k4=0,k5=232;
-  325|      1|    int v=1;
-  326|      1|    TreeTable *t; treetable_new(&t);
-  327|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  328|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  329|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  330|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  331|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  332|       |
-  333|      1|}
-  334|       |
-  335|       |/* test_22: k1=-2147483627, k2=33554432, k3=-2147483584, k4=16777216, k5=0
-  336|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  337|       |static void test_22(void)
-  338|      1|{
-  339|      1|    int k1=-2147483627,k2=33554432,k3=-2147483584,k4=16777216,k5=0;
-  340|      1|    int v=1;
-  341|      1|    TreeTable *t; treetable_new(&t);
-  342|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  343|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  344|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  345|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  346|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  347|       |
-  348|      1|}
-  349|       |
-  350|       |/* test_23: k1=15767422, k2=16777216, k3=65536, k4=-16777216, k5=0
-  351|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  352|       |static void test_23(void)
-  353|      1|{
-  354|      1|    int k1=15767422,k2=16777216,k3=65536,k4=-16777216,k5=0;
-  355|      1|    int v=1;
-  356|      1|    TreeTable *t; treetable_new(&t);
-  357|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  358|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  359|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  360|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  361|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  362|       |
-  363|      1|}
-  364|       |
-  365|       |/* test_24: k1=273679296, k2=-1878915952, k3=-1862270976, k4=0, k5=-1895825408
-  366|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  367|       |static void test_24(void)
-  368|      1|{
-  369|      1|    int k1=273679296,k2=-1878915952,k3=-1862270976,k4=0,k5=-1895825408;
-  370|      1|    int v=1;
-  371|      1|    TreeTable *t; treetable_new(&t);
-  372|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  373|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  374|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  375|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  376|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  377|       |
-  378|      1|}
-  379|       |
-  380|       |/* test_25: k1=33554432, k2=-301989888, k3=16777408, k4=16777216, k5=0
-  381|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  382|       |static void test_25(void)
-  383|      1|{
-  384|      1|    int k1=33554432,k2=-301989888,k3=16777408,k4=16777216,k5=0;
-  385|      1|    int v=1;
-  386|      1|    TreeTable *t; treetable_new(&t);
-  387|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  388|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  389|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  390|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  391|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  392|       |
-  393|      1|}
-  394|       |
-  395|       |/* test_26: k1=33554432, k2=-16777216, k3=128, k4=16777216, k5=0
-  396|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  397|       |static void test_26(void)
-  398|      1|{
-  399|      1|    int k1=33554432,k2=-16777216,k3=128,k4=16777216,k5=0;
-  400|      1|    int v=1;
-  401|      1|    TreeTable *t; treetable_new(&t);
-  402|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  403|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  404|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  405|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  406|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  407|       |
-  408|      1|}
-  409|       |
-  410|       |/* test_27: k1=50353166, k2=16793602, k3=12544, k4=110, k5=-2141176064
-  411|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  412|       |static void test_27(void)
-  413|      1|{
-  414|      1|    int k1=50353166,k2=16793602,k3=12544,k4=110,k5=-2141176064;
-  415|      1|    int v=1;
-  416|      1|    TreeTable *t; treetable_new(&t);
-  417|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  418|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  419|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  420|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  421|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  422|       |
-  423|      1|}
-  424|       |
-  425|       |/* test_28: k1=33554432, k2=16777216, k3=14680064, k4=-50331648, k5=0
-  426|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  427|       |static void test_28(void)
-  428|      1|{
-  429|      1|    int k1=33554432,k2=16777216,k3=14680064,k4=-50331648,k5=0;
-  430|      1|    int v=1;
-  431|      1|    TreeTable *t; treetable_new(&t);
-  432|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  433|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  434|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  435|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  436|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  437|       |
-  438|      1|}
-  439|       |
-  440|       |/* test_29: k1=16777216, k2=-16777216, k3=8388608, k4=33554432, k5=0
-  441|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  442|       |static void test_29(void)
-  443|      1|{
-  444|      1|    int k1=16777216,k2=-16777216,k3=8388608,k4=33554432,k5=0;
-  445|      1|    int v=1;
-  446|      1|    TreeTable *t; treetable_new(&t);
-  447|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  448|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  449|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  450|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  451|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  452|       |
-  453|      1|}
-  454|       |
-  455|       |/* test_30: k1=-33554432, k2=16777217, k3=0, k4=1090519072, k5=1107167168
-  456|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  457|       |static void test_30(void)
-  458|      1|{
-  459|      1|    int k1=-33554432,k2=16777217,k3=0,k4=1090519072,k5=1107167168;
-  460|      1|    int v=1;
-  461|      1|    TreeTable *t; treetable_new(&t);
-  462|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  463|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  464|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  465|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  466|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  467|       |
-  468|      1|}
-  469|       |
-  470|       |/* test_31: k1=-1073741823, k2=-2132123649, k3=-2130706432, k4=0, k5=-2134900738
-  471|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  472|       |static void test_31(void)
-  473|      1|{
-  474|      1|    int k1=-1073741823,k2=-2132123649,k3=-2130706432,k4=0,k5=-2134900738;
-  475|      1|    int v=1;
-  476|      1|    TreeTable *t; treetable_new(&t);
-  477|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  478|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  479|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  480|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  481|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  482|       |
-  483|      1|}
-  484|       |
-  485|       |/* test_32: k1=-2147422051, k2=16657, k3=-2130673648, k4=-2130673616, k5=32768
-  486|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  487|       |static void test_32(void)
-  488|      1|{
-  489|      1|    int k1=-2147422051,k2=16657,k3=-2130673648,k4=-2130673616,k5=32768;
-  490|      1|    int v=1;
-  491|      1|    TreeTable *t; treetable_new(&t);
-  492|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  493|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  494|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  495|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  496|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  497|       |
-  498|      1|}
-  499|       |
-  500|       |/* test_33: k1=16777376, k2=31522750, k3=65536, k4=16777216, k5=0
-  501|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  502|       |static void test_33(void)
-  503|      1|{
-  504|      1|    int k1=16777376,k2=31522750,k3=65536,k4=16777216,k5=0;
-  505|      1|    int v=1;
-  506|      1|    TreeTable *t; treetable_new(&t);
-  507|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  508|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  509|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  510|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  511|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  512|       |
-  513|      1|}
-  514|       |
-  515|       |/* test_34: k1=-2147458882, k2=1040187392, k3=-2130706432, k4=1090519040, k5=0
-  516|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  517|       |static void test_34(void)
-  518|      1|{
-  519|      1|    int k1=-2147458882,k2=1040187392,k3=-2130706432,k4=1090519040,k5=0;
-  520|      1|    int v=1;
-  521|      1|    TreeTable *t; treetable_new(&t);
-  522|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  523|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  524|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  525|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  526|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  527|       |
-  528|      1|}
-  529|       |
-  530|       |/* test_35: k1=2293760, k2=2162623, k3=65536, k4=16777216, k5=0
-  531|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  532|       |static void test_35(void)
-  533|      1|{
-  534|      1|    int k1=2293760,k2=2162623,k3=65536,k4=16777216,k5=0;
-  535|      1|    int v=1;
-  536|      1|    TreeTable *t; treetable_new(&t);
-  537|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  538|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  539|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  540|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  541|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  542|       |
-  543|      1|}
-  544|       |
-  545|       |/* test_36: k1=50331648, k2=0, k3=33554432, k4=64, k5=16777216
-  546|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  547|       |static void test_36(void)
-  548|      1|{
-  549|      1|    int k1=50331648,k2=0,k3=33554432,k4=64,k5=16777216;
-  550|      1|    int v=1;
-  551|      1|    TreeTable *t; treetable_new(&t);
-  552|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  553|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  554|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  555|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  556|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  557|       |
-  558|      1|}
-  559|       |
-  560|       |/* test_37: k1=33554432, k2=16777280, k3=16777216, k4=16777408, k5=0
-  561|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  562|       |static void test_37(void)
-  563|      1|{
-  564|      1|    int k1=33554432,k2=16777280,k3=16777216,k4=16777408,k5=0;
-  565|      1|    int v=1;
-  566|      1|    TreeTable *t; treetable_new(&t);
-  567|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  568|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  569|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  570|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  571|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  572|       |
-  573|      1|}
-  574|       |
-  575|       |/* test_38: k1=33554688, k2=2, k3=16777216, k4=-2147483264, k5=256
-  576|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  577|       |static void test_38(void)
-  578|      1|{
-  579|      1|    int k1=33554688,k2=2,k3=16777216,k4=-2147483264,k5=256;
-  580|      1|    int v=1;
-  581|      1|    TreeTable *t; treetable_new(&t);
-  582|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  583|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  584|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  585|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  586|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  587|       |
-  588|      1|}
-  589|       |
-  590|       |/* test_39: k1=33554432, k2=1048576, k3=16777216, k4=20, k5=0
-  591|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  592|       |static void test_39(void)
-  593|      1|{
-  594|      1|    int k1=33554432,k2=1048576,k3=16777216,k4=20,k5=0;
-  595|      1|    int v=1;
-  596|      1|    TreeTable *t; treetable_new(&t);
-  597|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  598|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  599|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  600|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  601|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  602|       |
-  603|      1|}
-  604|       |
-  605|       |/* test_40: k1=33554432, k2=-1258291201, k3=16777216, k4=0, k5=-2147483520
-  606|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  607|       |static void test_40(void)
-  608|      1|{
-  609|      1|    int k1=33554432,k2=-1258291201,k3=16777216,k4=0,k5=-2147483520;
-  610|      1|    int v=1;
-  611|      1|    TreeTable *t; treetable_new(&t);
-  612|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  613|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  614|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  615|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  616|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  617|       |
-  618|      1|}
-  619|       |
-  620|       |/* test_41: k1=50331648, k2=33554432, k3=128, k4=16777216, k5=0
-  621|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  622|       |static void test_41(void)
-  623|      1|{
-  624|      1|    int k1=50331648,k2=33554432,k3=128,k4=16777216,k5=0;
-  625|      1|    int v=1;
-  626|      1|    TreeTable *t; treetable_new(&t);
-  627|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  628|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  629|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  630|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  631|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  632|       |
-  633|      1|}
-  634|       |
-  635|       |/* test_42: k1=16777344, k2=50331648, k3=16777216, k4=16777408, k5=0
-  636|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  637|       |static void test_42(void)
-  638|      1|{
-  639|      1|    int k1=16777344,k2=50331648,k3=16777216,k4=16777408,k5=0;
-  640|      1|    int v=1;
-  641|      1|    TreeTable *t; treetable_new(&t);
-  642|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  643|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  644|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  645|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  646|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  647|       |
-  648|      1|}
-  649|       |
-  650|       |/* test_43: k1=33554432, k2=33554560, k3=16777216, k4=50331776, k5=0
-  651|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  652|       |static void test_43(void)
-  653|      1|{
-  654|      1|    int k1=33554432,k2=33554560,k3=16777216,k4=50331776,k5=0;
-  655|      1|    int v=1;
-  656|      1|    TreeTable *t; treetable_new(&t);
-  657|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  658|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  659|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  660|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  661|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  662|       |
-  663|      1|}
-  664|       |
-  665|       |/* test_44: k1=33554432, k2=16777216, k3=-2132738049, k4=-33554432, k5=0
-  666|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  667|       |static void test_44(void)
-  668|      1|{
-  669|      1|    int k1=33554432,k2=16777216,k3=-2132738049,k4=-33554432,k5=0;
-  670|      1|    int v=1;
-  671|      1|    TreeTable *t; treetable_new(&t);
-  672|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  673|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  674|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  675|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  676|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  677|       |
-  678|      1|}
-  679|       |
-  680|       |/* test_45: k1=50331648, k2=16777216, k3=0, k4=-33554432, k5=252
-  681|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  682|       |static void test_45(void)
-  683|      1|{
-  684|      1|    int k1=50331648,k2=16777216,k3=0,k4=-33554432,k5=252;
-  685|      1|    int v=1;
-  686|      1|    TreeTable *t; treetable_new(&t);
-  687|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  688|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  689|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  690|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  691|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  692|       |
-  693|      1|}
-  694|       |
-  695|       |/* test_46: k1=-33554432, k2=0, k3=-2147418112, k4=-2130706434, k5=16777216
-  696|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  697|       |static void test_46(void)
-  698|      1|{
-  699|      1|    int k1=-33554432,k2=0,k3=-2147418112,k4=-2130706434,k5=16777216;
-  700|      1|    int v=1;
-  701|      1|    TreeTable *t; treetable_new(&t);
-  702|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  703|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  704|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  705|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  706|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  707|       |
-  708|      1|}
-  709|       |
-  710|       |/* test_47: k1=65536, k2=168191, k3=-1879048191, k4=-1895825408, k5=0
-  711|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  712|       |static void test_47(void)
-  713|      1|{
-  714|      1|    int k1=65536,k2=168191,k3=-1879048191,k4=-1895825408,k5=0;
-  715|      1|    int v=1;
-  716|      1|    TreeTable *t; treetable_new(&t);
-  717|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  718|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  719|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  720|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  721|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  722|       |
-  723|      1|}
-  724|       |
-  725|       |/* test_48: k1=2061487854, k2=-33554176, k3=-2147481599, k4=-2147481600, k5=0
-  726|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  727|       |static void test_48(void)
-  728|      1|{
-  729|      1|    int k1=2061487854,k2=-33554176,k3=-2147481599,k4=-2147481600,k5=0;
-  730|      1|    int v=1;
-  731|      1|    TreeTable *t; treetable_new(&t);
-  732|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  733|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  734|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  735|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  736|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  737|       |
-  738|      1|}
-  739|       |
-  740|       |/* test_49: k1=33554432, k2=1090519296, k3=16777216, k4=0, k5=1107296500
-  741|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  742|       |static void test_49(void)
-  743|      1|{
-  744|      1|    int k1=33554432,k2=1090519296,k3=16777216,k4=0,k5=1107296500;
-  745|      1|    int v=1;
-  746|      1|    TreeTable *t; treetable_new(&t);
-  747|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  748|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  749|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  750|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  751|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  752|       |
-  753|      1|}
-  754|       |
-  755|       |/* test_50: k1=61695, k2=16777216, k3=-2130706432, k4=0, k5=256
-  756|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  757|       |static void test_50(void)
-  758|      1|{
-  759|      1|    int k1=61695,k2=16777216,k3=-2130706432,k4=0,k5=256;
-  760|      1|    int v=1;
-  761|      1|    TreeTable *t; treetable_new(&t);
-  762|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  763|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  764|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  765|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  766|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  767|       |
-  768|      1|}
-  769|       |
-  770|       |/* test_51: k1=16777280, k2=33554432, k3=16777216, k4=0, k5=16777408
-  771|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  772|       |static void test_51(void)
-  773|      1|{
-  774|      1|    int k1=16777280,k2=33554432,k3=16777216,k4=0,k5=16777408;
-  775|      1|    int v=1;
-  776|      1|    TreeTable *t; treetable_new(&t);
-  777|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  778|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  779|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  780|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  781|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  782|       |
-  783|      1|}
-  784|       |
-  785|       |/* test_52: k1=14745341, k2=-2130706432, k3=-1593835520, k4=-16777216, k5=0
-  786|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  787|       |static void test_52(void)
-  788|      1|{
-  789|      1|    int k1=14745341,k2=-2130706432,k3=-1593835520,k4=-16777216,k5=0;
-  790|      1|    int v=1;
-  791|      1|    TreeTable *t; treetable_new(&t);
-  792|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  793|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  794|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  795|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  796|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  797|       |
-  798|      1|}
-  799|       |
-  800|       |/* test_53: k1=-2129657864, k2=-2139095040, k3=-2139095039, k4=-2130706432, k5=0
-  801|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  802|       |static void test_53(void)
-  803|      1|{
-  804|      1|    int k1=-2129657864,k2=-2139095040,k3=-2139095039,k4=-2130706432,k5=0;
-  805|      1|    int v=1;
-  806|      1|    TreeTable *t; treetable_new(&t);
-  807|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  808|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  809|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  810|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  811|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  812|       |
-  813|      1|}
-  814|       |
-  815|       |/* test_54: k1=-1601171403, k2=-2130706432, k3=-1610547200, k4=-33554432, k5=0
-  816|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  817|       |static void test_54(void)
-  818|      1|{
-  819|      1|    int k1=-1601171403,k2=-2130706432,k3=-1610547200,k4=-33554432,k5=0;
-  820|      1|    int v=1;
-  821|      1|    TreeTable *t; treetable_new(&t);
-  822|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  823|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  824|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  825|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  826|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  827|       |
-  828|      1|}
-  829|       |
-  830|       |/* test_55: k1=-1056964608, k2=-1073741824, k3=7383981, k4=-33554432, k5=0
-  831|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  832|       |static void test_55(void)
-  833|      1|{
-  834|      1|    int k1=-1056964608,k2=-1073741824,k3=7383981,k4=-33554432,k5=0;
-  835|      1|    int v=1;
-  836|      1|    TreeTable *t; treetable_new(&t);
-  837|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  838|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  839|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  840|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  841|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  842|       |
-  843|      1|}
-  844|       |
-  845|       |/* test_56: k1=16464, k2=8421, k3=-2130689982, k4=16793680, k5=16640
-  846|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  847|       |static void test_56(void)
-  848|      1|{
-  849|      1|    int k1=16464,k2=8421,k3=-2130689982,k4=16793680,k5=16640;
-  850|      1|    int v=1;
-  851|      1|    TreeTable *t; treetable_new(&t);
-  852|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  853|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  854|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  855|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  856|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  857|       |
-  858|      1|}
-  859|       |
-  860|       |/* test_57: k1=50331648, k2=16777216, k3=0, k4=536870914, k5=553648256
-  861|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  862|       |static void test_57(void)
-  863|      1|{
-  864|      1|    int k1=50331648,k2=16777216,k3=0,k4=536870914,k5=553648256;
-  865|      1|    int v=1;
-  866|      1|    TreeTable *t; treetable_new(&t);
-  867|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  868|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  869|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  870|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  871|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  872|       |
-  873|      1|}
-  874|       |
-  875|       |/* test_58: k1=33554432, k2=0, k3=-2097152000, k4=16777216, k5=192
-  876|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  877|       |static void test_58(void)
-  878|      1|{
-  879|      1|    int k1=33554432,k2=0,k3=-2097152000,k4=16777216,k5=192;
-  880|      1|    int v=1;
-  881|      1|    TreeTable *t; treetable_new(&t);
-  882|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  883|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  884|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  885|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  886|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  887|       |
-  888|      1|}
-  889|       |
-  890|       |/* test_59: k1=-18808949, k2=-16777216, k3=13659769, k4=-33554432, k5=0
-  891|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  892|       |static void test_59(void)
-  893|      1|{
-  894|      1|    int k1=-18808949,k2=-16777216,k3=13659769,k4=-33554432,k5=0;
-  895|      1|    int v=1;
-  896|      1|    TreeTable *t; treetable_new(&t);
-  897|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  898|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  899|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  900|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  901|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  902|       |
-  903|      1|}
-  904|       |
-  905|       |/* test_60: k1=1, k2=0, k3=-2145386495, k4=-2146369533, k5=2097152
-  906|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  907|       |static void test_60(void)
-  908|      1|{
-  909|      1|    int k1=1,k2=0,k3=-2145386495,k4=-2146369533,k5=2097152;
-  910|      1|    int v=1;
-  911|      1|    TreeTable *t; treetable_new(&t);
-  912|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  913|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  914|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  915|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  916|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  917|       |
-  918|      1|}
-  919|       |
-  920|       |/* test_61: k1=65536, k2=61695, k3=-2130706432, k4=16777216, k5=0
-  921|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  922|       |static void test_61(void)
-  923|      1|{
-  924|      1|    int k1=65536,k2=61695,k3=-2130706432,k4=16777216,k5=0;
-  925|      1|    int v=1;
-  926|      1|    TreeTable *t; treetable_new(&t);
-  927|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  928|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  929|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  930|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  931|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  932|       |
-  933|      1|}
-  934|       |
-  935|       |/* test_62: k1=-33554432, k2=50331648, k3=33553781, k4=16777216, k5=0
-  936|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  937|       |static void test_62(void)
-  938|      1|{
-  939|      1|    int k1=-33554432,k2=50331648,k3=33553781,k4=16777216,k5=0;
-  940|      1|    int v=1;
-  941|      1|    TreeTable *t; treetable_new(&t);
-  942|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  943|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  944|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  945|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  946|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  947|       |
-  948|      1|}
-  949|       |
-  950|       |/* test_63: k1=-2130706432, k2=16777216, k3=-2131730441, k4=-50331648, k5=0
-  951|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  952|       |static void test_63(void)
-  953|      1|{
-  954|      1|    int k1=-2130706432,k2=16777216,k3=-2131730441,k4=-50331648,k5=0;
-  955|      1|    int v=1;
-  956|      1|    TreeTable *t; treetable_new(&t);
-  957|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  958|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  959|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  960|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  961|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  962|       |
-  963|      1|}
-  964|       |
-  965|       |/* test_64: k1=-2130706432, k2=-2147483632, k3=-2143164442, k4=16777216, k5=0
-  966|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  967|       |static void test_64(void)
-  968|      1|{
-  969|      1|    int k1=-2130706432,k2=-2147483632,k3=-2143164442,k4=16777216,k5=0;
-  970|      1|    int v=1;
-  971|      1|    TreeTable *t; treetable_new(&t);
-  972|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  973|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  974|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  975|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  976|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  977|       |
-  978|      1|}
-  979|       |
-  980|       |/* test_65: k1=33566229, k2=-33554368, k3=-2147482624, k4=50356224, k5=16777216
-  981|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  982|       |static void test_65(void)
-  983|      1|{
-  984|      1|    int k1=33566229,k2=-33554368,k3=-2147482624,k4=50356224,k5=16777216;
-  985|      1|    int v=1;
-  986|      1|    TreeTable *t; treetable_new(&t);
-  987|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
-  988|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
-  989|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
-  990|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
-  991|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
-  992|       |
-  993|      1|}
-  994|       |
-  995|       |/* test_66: k1=4229, k2=33554432, k3=-2130706432, k4=0, k5=16777216
-  996|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
-  997|       |static void test_66(void)
-  998|      1|{
-  999|      1|    int k1=4229,k2=33554432,k3=-2130706432,k4=0,k5=16777216;
- 1000|      1|    int v=1;
- 1001|      1|    TreeTable *t; treetable_new(&t);
- 1002|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1003|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1004|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1005|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1006|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1007|       |
- 1008|      1|}
- 1009|       |
- 1010|       |/* test_67: k1=-1073741824, k2=-2147442946, k3=-2130706432, k4=0, k5=-1610596619
- 1011|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1012|       |static void test_67(void)
- 1013|      1|{
- 1014|      1|    int k1=-1073741824,k2=-2147442946,k3=-2130706432,k4=0,k5=-1610596619;
- 1015|      1|    int v=1;
- 1016|      1|    TreeTable *t; treetable_new(&t);
- 1017|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1018|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1019|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1020|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1021|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1022|       |
- 1023|      1|}
- 1024|       |
- 1025|       |/* test_68: k1=-1073741824, k2=-1073741820, k3=-1610612736, k4=0, k5=-1073741819
- 1026|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1027|       |static void test_68(void)
- 1028|      1|{
- 1029|      1|    int k1=-1073741824,k2=-1073741820,k3=-1610612736,k4=0,k5=-1073741819;
- 1030|      1|    int v=1;
- 1031|      1|    TreeTable *t; treetable_new(&t);
- 1032|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1033|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1034|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1035|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1036|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1037|       |
- 1038|      1|}
- 1039|       |
- 1040|       |/* test_69: k1=33554432, k2=-1128272897, k3=-1073741824, k4=16777216, k5=0
- 1041|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1042|       |static void test_69(void)
- 1043|      1|{
- 1044|      1|    int k1=33554432,k2=-1128272897,k3=-1073741824,k4=16777216,k5=0;
- 1045|      1|    int v=1;
- 1046|      1|    TreeTable *t; treetable_new(&t);
- 1047|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1048|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1049|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1050|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1051|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1052|       |
- 1053|      1|}
- 1054|       |
- 1055|       |/* test_70: k1=-33554432, k2=33554432, k3=16777216, k4=0, k5=192
- 1056|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1057|       |static void test_70(void)
- 1058|      1|{
- 1059|      1|    int k1=-33554432,k2=33554432,k3=16777216,k4=0,k5=192;
- 1060|      1|    int v=1;
- 1061|      1|    TreeTable *t; treetable_new(&t);
- 1062|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1063|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1064|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1065|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1066|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1067|       |
- 1068|      1|}
- 1069|       |
- 1070|       |/* test_71: k1=16777216, k2=23129835, k3=33619968, k4=50331648, k5=0
- 1071|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1072|       |static void test_71(void)
- 1073|      1|{
- 1074|      1|    int k1=16777216,k2=23129835,k3=33619968,k4=50331648,k5=0;
- 1075|      1|    int v=1;
- 1076|      1|    TreeTable *t; treetable_new(&t);
- 1077|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1078|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1079|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1080|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1081|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1082|       |
- 1083|      1|}
- 1084|       |
- 1085|       |/* test_72: k1=16777440, k2=16838911, k3=-2130706432, k4=16777216, k5=0
- 1086|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1087|       |static void test_72(void)
- 1088|      1|{
- 1089|      1|    int k1=16777440,k2=16838911,k3=-2130706432,k4=16777216,k5=0;
- 1090|      1|    int v=1;
- 1091|      1|    TreeTable *t; treetable_new(&t);
- 1092|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1093|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1094|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1095|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1096|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1097|       |
- 1098|      1|}
- 1099|       |
- 1100|       |/* test_73: k1=94, k2=88, k3=33554432, k4=16785408, k5=8192
- 1101|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1102|       |static void test_73(void)
- 1103|      1|{
- 1104|      1|    int k1=94,k2=88,k3=33554432,k4=16785408,k5=8192;
- 1105|      1|    int v=1;
- 1106|      1|    TreeTable *t; treetable_new(&t);
- 1107|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1108|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1109|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1110|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1111|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1112|       |
- 1113|      1|}
- 1114|       |
- 1115|       |/* test_74: k1=22, k2=33554454, k3=16777238, k4=4, k5=512
- 1116|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1117|       |static void test_74(void)
- 1118|      1|{
- 1119|      1|    int k1=22,k2=33554454,k3=16777238,k4=4,k5=512;
- 1120|      1|    int v=1;
- 1121|      1|    TreeTable *t; treetable_new(&t);
- 1122|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1123|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1124|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1125|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1126|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1127|       |
- 1128|      1|}
- 1129|       |
- 1130|       |/* test_75: k1=14691765, k2=1593835520, k3=1627389952, k4=-33554432, k5=0
- 1131|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1132|       |static void test_75(void)
- 1133|      1|{
- 1134|      1|    int k1=14691765,k2=1593835520,k3=1627389952,k4=-33554432,k5=0;
- 1135|      1|    int v=1;
- 1136|      1|    TreeTable *t; treetable_new(&t);
- 1137|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1138|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1139|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1140|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1141|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1142|       |
- 1143|      1|}
- 1144|       |
- 1145|       |/* test_76: k1=-2142200075, k2=1040187392, k3=1090519040, k4=-16777216, k5=0
- 1146|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1147|       |static void test_76(void)
- 1148|      1|{
- 1149|      1|    int k1=-2142200075,k2=1040187392,k3=1090519040,k4=-16777216,k5=0;
- 1150|      1|    int v=1;
- 1151|      1|    TreeTable *t; treetable_new(&t);
- 1152|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1153|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1154|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1155|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1156|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1157|       |
- 1158|      1|}
- 1159|       |
- 1160|       |/* test_77: k1=-1002755, k2=1040187392, k3=1090519040, k4=-16777216, k5=0
- 1161|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1162|       |static void test_77(void)
- 1163|      1|{
- 1164|      1|    int k1=-1002755,k2=1040187392,k3=1090519040,k4=-16777216,k5=0;
- 1165|      1|    int v=1;
- 1166|      1|    TreeTable *t; treetable_new(&t);
- 1167|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1168|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1169|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1170|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1171|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1172|       |
- 1173|      1|}
- 1174|       |
- 1175|       |/* test_78: k1=-2147423745, k2=-2146435072, k3=-2130706432, k4=0, k5=-2143281152
- 1176|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1177|       |static void test_78(void)
- 1178|      1|{
- 1179|      1|    int k1=-2147423745,k2=-2146435072,k3=-2130706432,k4=0,k5=-2143281152;
- 1180|      1|    int v=1;
- 1181|      1|    TreeTable *t; treetable_new(&t);
- 1182|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1183|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1184|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1185|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1186|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1187|       |
- 1188|      1|}
- 1189|       |
- 1190|       |/* test_79: k1=16777440, k2=16777468, k3=50331648, k4=16777216, k5=0
- 1191|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1192|       |static void test_79(void)
- 1193|      1|{
- 1194|      1|    int k1=16777440,k2=16777468,k3=50331648,k4=16777216,k5=0;
- 1195|      1|    int v=1;
- 1196|      1|    TreeTable *t; treetable_new(&t);
- 1197|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1198|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1199|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1200|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1201|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1202|       |
- 1203|      1|}
- 1204|       |
- 1205|       |/* test_80: k1=-16777216, k2=16777216, k3=0, k4=-1358954496, k5=-1329856512
- 1206|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1207|       |static void test_80(void)
- 1208|      1|{
- 1209|      1|    int k1=-16777216,k2=16777216,k3=0,k4=-1358954496,k5=-1329856512;
- 1210|      1|    int v=1;
- 1211|      1|    TreeTable *t; treetable_new(&t);
- 1212|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1213|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1214|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1215|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1216|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1217|       |
- 1218|      1|}
- 1219|       |
- 1220|       |/* test_81: k1=-33554432, k2=0, k3=16777344, k4=16777343, k5=16777216
- 1221|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1222|       |static void test_81(void)
- 1223|      1|{
- 1224|      1|    int k1=-33554432,k2=0,k3=16777344,k4=16777343,k5=16777216;
- 1225|      1|    int v=1;
- 1226|      1|    TreeTable *t; treetable_new(&t);
- 1227|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1228|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1229|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1230|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1231|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1232|       |
- 1233|      1|}
- 1234|       |
- 1235|       |/* test_82: k1=-2130706432, k2=-2147479551, k3=16777216, k4=0, k5=-2146955264
- 1236|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1237|       |static void test_82(void)
- 1238|      1|{
- 1239|      1|    int k1=-2130706432,k2=-2147479551,k3=16777216,k4=0,k5=-2146955264;
- 1240|      1|    int v=1;
- 1241|      1|    TreeTable *t; treetable_new(&t);
- 1242|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1243|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1244|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1245|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1246|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1247|       |
- 1248|      1|}
- 1249|       |
- 1250|       |/* test_83: k1=8388660, k2=6352831, k3=8486912, k4=25198592, k5=8392704
- 1251|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1252|       |static void test_83(void)
- 1253|      1|{
- 1254|      1|    int k1=8388660,k2=6352831,k3=8486912,k4=25198592,k5=8392704;
- 1255|      1|    int v=1;
- 1256|      1|    TreeTable *t; treetable_new(&t);
- 1257|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1258|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1259|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1260|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1261|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1262|       |
- 1263|      1|}
- 1264|       |
- 1265|       |/* test_84: k1=1048576, k2=33554432, k3=17825792, k4=1048768, k5=0
- 1266|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1267|       |static void test_84(void)
- 1268|      1|{
- 1269|      1|    int k1=1048576,k2=33554432,k3=17825792,k4=1048768,k5=0;
- 1270|      1|    int v=1;
- 1271|      1|    TreeTable *t; treetable_new(&t);
- 1272|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1273|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1274|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1275|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1276|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1277|       |
- 1278|      1|}
- 1279|       |
- 1280|       |/* test_85: k1=33554432, k2=50331648, k3=33554616, k4=16777216, k5=0
- 1281|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1282|       |static void test_85(void)
- 1283|      1|{
- 1284|      1|    int k1=33554432,k2=50331648,k3=33554616,k4=16777216,k5=0;
- 1285|      1|    int v=1;
- 1286|      1|    TreeTable *t; treetable_new(&t);
- 1287|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1288|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1289|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1290|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1291|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1292|       |
- 1293|      1|}
- 1294|       |
- 1295|       |/* test_86: k1=-33554432, k2=1073741824, k3=1082654720, k4=1090519040, k5=0
- 1296|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1297|       |static void test_86(void)
- 1298|      1|{
- 1299|      1|    int k1=-33554432,k2=1073741824,k3=1082654720,k4=1090519040,k5=0;
- 1300|      1|    int v=1;
- 1301|      1|    TreeTable *t; treetable_new(&t);
- 1302|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1303|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1304|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1305|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1306|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1307|       |
- 1308|      1|}
- 1309|       |
- 1310|       |/* test_87: k1=65536, k2=104, k3=33554432, k4=16777216, k5=0
- 1311|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1312|       |static void test_87(void)
- 1313|      1|{
- 1314|      1|    int k1=65536,k2=104,k3=33554432,k4=16777216,k5=0;
- 1315|      1|    int v=1;
- 1316|      1|    TreeTable *t; treetable_new(&t);
- 1317|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1318|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1319|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1320|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1321|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1322|       |
- 1323|      1|}
- 1324|       |
- 1325|       |/* test_88: k1=503320576, k2=16777216, k3=553648128, k4=0, k5=255
- 1326|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1327|       |static void test_88(void)
- 1328|      1|{
- 1329|      1|    int k1=503320576,k2=16777216,k3=553648128,k4=0,k5=255;
- 1330|      1|    int v=1;
- 1331|      1|    TreeTable *t; treetable_new(&t);
- 1332|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1333|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1334|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1335|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1336|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1337|       |
- 1338|      1|}
- 1339|       |
- 1340|       |/* test_89: k1=33554432, k2=0, k3=33554560, k4=50331900, k5=16777216
- 1341|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1342|       |static void test_89(void)
- 1343|      1|{
- 1344|      1|    int k1=33554432,k2=0,k3=33554560,k4=50331900,k5=16777216;
- 1345|      1|    int v=1;
- 1346|      1|    TreeTable *t; treetable_new(&t);
- 1347|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1348|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1349|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1350|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1351|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1352|       |
- 1353|      1|}
- 1354|       |
- 1355|       |/* test_90: k1=33554432, k2=0, k3=50331648, k4=16777216, k5=64
- 1356|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1357|       |static void test_90(void)
- 1358|      1|{
- 1359|      1|    int k1=33554432,k2=0,k3=50331648,k4=16777216,k5=64;
- 1360|      1|    int v=1;
- 1361|      1|    TreeTable *t; treetable_new(&t);
- 1362|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1363|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1364|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1365|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1366|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1367|       |
- 1368|      1|}
- 1369|       |
- 1370|       |/* test_91: k1=-2134455419, k2=-2134900736, k3=-2130706432, k4=0, k5=-2139095040
- 1371|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1372|       |static void test_91(void)
- 1373|      1|{
- 1374|      1|    int k1=-2134455419,k2=-2134900736,k3=-2130706432,k4=0,k5=-2139095040;
- 1375|      1|    int v=1;
- 1376|      1|    TreeTable *t; treetable_new(&t);
- 1377|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1378|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1379|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1380|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1381|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1382|       |
- 1383|      1|}
- 1384|       |
- 1385|       |/* test_92: k1=-16777216, k2=-2147483520, k3=16777216, k4=-1073741696, k5=0
- 1386|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1387|       |static void test_92(void)
- 1388|      1|{
- 1389|      1|    int k1=-16777216,k2=-2147483520,k3=16777216,k4=-1073741696,k5=0;
- 1390|      1|    int v=1;
- 1391|      1|    TreeTable *t; treetable_new(&t);
- 1392|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1393|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1394|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1395|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1396|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1397|       |
- 1398|      1|}
- 1399|       |
- 1400|       |/* test_93: k1=-1073741824, k2=-16777216, k3=-1610612736, k4=0, k5=14745599
- 1401|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1402|       |static void test_93(void)
- 1403|      1|{
- 1404|      1|    int k1=-1073741824,k2=-16777216,k3=-1610612736,k4=0,k5=14745599;
- 1405|      1|    int v=1;
- 1406|      1|    TreeTable *t; treetable_new(&t);
- 1407|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1408|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1409|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1410|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1411|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1412|       |
- 1413|      1|}
- 1414|       |
- 1415|       |/* test_94: k1=57591, k2=50331648, k3=-2130706432, k4=16777216, k5=0
- 1416|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1417|       |static void test_94(void)
- 1418|      1|{
- 1419|      1|    int k1=57591,k2=50331648,k3=-2130706432,k4=16777216,k5=0;
- 1420|      1|    int v=1;
- 1421|      1|    TreeTable *t; treetable_new(&t);
- 1422|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1423|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1424|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1425|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1426|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1427|       |
- 1428|      1|}
- 1429|       |
- 1430|       |/* test_95: k1=57385, k2=-2147483520, k3=-2130706432, k4=-2139095040, k5=0
- 1431|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1432|       |static void test_95(void)
- 1433|      1|{
- 1434|      1|    int k1=57385,k2=-2147483520,k3=-2130706432,k4=-2139095040,k5=0;
- 1435|      1|    int v=1;
- 1436|      1|    TreeTable *t; treetable_new(&t);
- 1437|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1438|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1439|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1440|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1441|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1442|       |
- 1443|      1|}
- 1444|       |
- 1445|       |/* test_96: k1=1048579, k2=30588, k3=-2129655808, k4=-33554432, k5=1050624
- 1446|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1447|       |static void test_96(void)
- 1448|      1|{
- 1449|      1|    int k1=1048579,k2=30588,k3=-2129655808,k4=-33554432,k5=1050624;
- 1450|      1|    int v=1;
- 1451|      1|    TreeTable *t; treetable_new(&t);
- 1452|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1453|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1454|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1455|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1456|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1457|       |
- 1458|      1|}
- 1459|       |
- 1460|       |/* test_97: k1=33554432, k2=192, k3=16777216, k4=0, k5=16777272
- 1461|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1462|       |static void test_97(void)
- 1463|      1|{
- 1464|      1|    int k1=33554432,k2=192,k3=16777216,k4=0,k5=16777272;
- 1465|      1|    int v=1;
- 1466|      1|    TreeTable *t; treetable_new(&t);
- 1467|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1468|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1469|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1470|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1471|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1472|       |
- 1473|      1|}
- 1474|       |
- 1475|       |/* test_98: k1=1, k2=50332160, k3=-2130705920, k4=16777728, k5=512
- 1476|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1477|       |static void test_98(void)
- 1478|      1|{
- 1479|      1|    int k1=1,k2=50332160,k3=-2130705920,k4=16777728,k5=512;
- 1480|      1|    int v=1;
- 1481|      1|    TreeTable *t; treetable_new(&t);
- 1482|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1483|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1484|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1485|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1486|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1487|       |
- 1488|      1|}
- 1489|       |
- 1490|       |/* test_99: k1=167833825, k2=1, k3=-2129657856, k4=-32505856, k5=1048576
- 1491|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1492|       |static void test_99(void)
- 1493|      1|{
- 1494|      1|    int k1=167833825,k2=1,k3=-2129657856,k4=-32505856,k5=1048576;
- 1495|      1|    int v=1;
- 1496|      1|    TreeTable *t; treetable_new(&t);
- 1497|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1498|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1499|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1500|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1501|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1502|       |
- 1503|      1|}
- 1504|       |
- 1505|       |/* test_100: k1=-16777216, k2=-16777088, k3=16777216, k4=-16777119, k5=0
- 1506|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1507|       |static void test_100(void)
- 1508|      1|{
- 1509|      1|    int k1=-16777216,k2=-16777088,k3=16777216,k4=-16777119,k5=0;
- 1510|      1|    int v=1;
- 1511|      1|    TreeTable *t; treetable_new(&t);
- 1512|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1513|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1514|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1515|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1516|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1517|       |
- 1518|      1|}
- 1519|       |
- 1520|       |/* test_101: k1=33554432, k2=0, k3=-2130706432, k4=252, k5=16777216
- 1521|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1522|       |static void test_101(void)
- 1523|      1|{
- 1524|      1|    int k1=33554432,k2=0,k3=-2130706432,k4=252,k5=16777216;
- 1525|      1|    int v=1;
- 1526|      1|    TreeTable *t; treetable_new(&t);
- 1527|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1528|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1529|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1530|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1531|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1532|       |
- 1533|      1|}
- 1534|       |
- 1535|       |/* test_102: k1=196610, k2=417814, k3=-2130247680, k4=393354, k5=458752
- 1536|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1537|       |static void test_102(void)
- 1538|      1|{
- 1539|      1|    int k1=196610,k2=417814,k3=-2130247680,k4=393354,k5=458752;
- 1540|      1|    int v=1;
- 1541|      1|    TreeTable *t; treetable_new(&t);
- 1542|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1543|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1544|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1545|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1546|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1547|       |
- 1548|      1|}
- 1549|       |
- 1550|       |/* test_103: k1=-2045181440, k2=-2143289216, k3=-2130706432, k4=-2139095040, k5=0
- 1551|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1552|       |static void test_103(void)
- 1553|      1|{
- 1554|      1|    int k1=-2045181440,k2=-2143289216,k3=-2130706432,k4=-2139095040,k5=0;
- 1555|      1|    int v=1;
- 1556|      1|    TreeTable *t; treetable_new(&t);
- 1557|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1558|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1559|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1560|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1561|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1562|       |
- 1563|      1|}
- 1564|       |
- 1565|       |/* test_104: k1=-50331648, k2=16777216, k3=1073741824, k4=22083579, k5=0
- 1566|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1567|       |static void test_104(void)
- 1568|      1|{
- 1569|      1|    int k1=-50331648,k2=16777216,k3=1073741824,k4=22083579,k5=0;
- 1570|      1|    int v=1;
- 1571|      1|    TreeTable *t; treetable_new(&t);
- 1572|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1573|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1574|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1575|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1576|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1577|       |
- 1578|      1|}
- 1579|       |
- 1580|       |/* test_105: k1=-1069547519, k2=-1877979046, k3=-2143158240, k4=-1794113536, k5=1078067200
- 1581|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1582|       |static void test_105(void)
- 1583|      1|{
- 1584|      1|    int k1=-1069547519,k2=-1877979046,k3=-2143158240,k4=-1794113536,k5=1078067200;
- 1585|      1|    int v=1;
- 1586|      1|    TreeTable *t; treetable_new(&t);
- 1587|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1588|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1589|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1590|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1591|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1592|       |
- 1593|      1|}
- 1594|       |
- 1595|       |/* test_106: k1=1073803517, k2=2, k3=-2130706432, k4=788529152, k5=0
- 1596|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1597|       |static void test_106(void)
- 1598|      1|{
- 1599|      1|    int k1=1073803517,k2=2,k3=-2130706432,k4=788529152,k5=0;
- 1600|      1|    int v=1;
- 1601|      1|    TreeTable *t; treetable_new(&t);
- 1602|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1603|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1604|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1605|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1606|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1607|       |
- 1608|      1|}
- 1609|       |
- 1610|       |/* test_107: k1=-2097152000, k2=20569, k3=-2130706432, k4=16777216, k5=0
- 1611|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1612|       |static void test_107(void)
- 1613|      1|{
- 1614|      1|    int k1=-2097152000,k2=20569,k3=-2130706432,k4=16777216,k5=0;
- 1615|      1|    int v=1;
- 1616|      1|    TreeTable *t; treetable_new(&t);
- 1617|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1618|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1619|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1620|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1621|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1622|       |
- 1623|      1|}
- 1624|       |
- 1625|       |/* test_108: k1=-587374602, k2=-2147483640, k3=-2147483639, k4=-2147483647, k5=0
- 1626|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1627|       |static void test_108(void)
- 1628|      1|{
- 1629|      1|    int k1=-587374602,k2=-2147483640,k3=-2147483639,k4=-2147483647,k5=0;
- 1630|      1|    int v=1;
- 1631|      1|    TreeTable *t; treetable_new(&t);
- 1632|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1633|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1634|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1635|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1636|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1637|       |
- 1638|      1|}
- 1639|       |
- 1640|       |/* test_109: k1=503316480, k2=16777216, k3=553648128, k4=0, k5=503316536
- 1641|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1642|       |static void test_109(void)
- 1643|      1|{
- 1644|      1|    int k1=503316480,k2=16777216,k3=553648128,k4=0,k5=503316536;
- 1645|      1|    int v=1;
- 1646|      1|    TreeTable *t; treetable_new(&t);
- 1647|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1648|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1649|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1650|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1651|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1652|       |
- 1653|      1|}
- 1654|       |
- 1655|       |/* test_110: k1=65536, k2=90277, k3=-2130706432, k4=16842752, k5=0
- 1656|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1657|       |static void test_110(void)
- 1658|      1|{
- 1659|      1|    int k1=65536,k2=90277,k3=-2130706432,k4=16842752,k5=0;
- 1660|      1|    int v=1;
- 1661|      1|    TreeTable *t; treetable_new(&t);
- 1662|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1663|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1664|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1665|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1666|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1667|       |
- 1668|      1|}
- 1669|       |
- 1670|       |/* test_111: k1=-2130706432, k2=-33554432, k3=16777216, k4=0, k5=2104
- 1671|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1672|       |static void test_111(void)
- 1673|      1|{
- 1674|      1|    int k1=-2130706432,k2=-33554432,k3=16777216,k4=0,k5=2104;
- 1675|      1|    int v=1;
- 1676|      1|    TreeTable *t; treetable_new(&t);
- 1677|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1678|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1679|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1680|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1681|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1682|       |
- 1683|      1|}
- 1684|       |
- 1685|       |/* test_112: k1=33554433, k2=50396240, k3=41943040, k4=50333201, k5=16777216
- 1686|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1687|       |static void test_112(void)
- 1688|      1|{
- 1689|      1|    int k1=33554433,k2=50396240,k3=41943040,k4=50333201,k5=16777216;
- 1690|      1|    int v=1;
- 1691|      1|    TreeTable *t; treetable_new(&t);
- 1692|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1693|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1694|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1695|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1696|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1697|       |
- 1698|      1|}
- 1699|       |
- 1700|       |/* test_113: k1=33554432, k2=144, k3=-2130706432, k4=0, k5=-2130706328
- 1701|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1702|       |static void test_113(void)
- 1703|      1|{
- 1704|      1|    int k1=33554432,k2=144,k3=-2130706432,k4=0,k5=-2130706328;
- 1705|      1|    int v=1;
- 1706|      1|    TreeTable *t; treetable_new(&t);
- 1707|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1708|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1709|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1710|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1711|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1712|       |
- 1713|      1|}
- 1714|       |
- 1715|       |/* test_114: k1=-50331648, k2=16777408, k3=16777216, k4=16777343, k5=0
- 1716|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1717|       |static void test_114(void)
- 1718|      1|{
- 1719|      1|    int k1=-50331648,k2=16777408,k3=16777216,k4=16777343,k5=0;
- 1720|      1|    int v=1;
- 1721|      1|    TreeTable *t; treetable_new(&t);
- 1722|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1723|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1724|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1725|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1726|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1727|       |
- 1728|      1|}
- 1729|       |
- 1730|       |/* test_115: k1=1753220858, k2=1233141982, k3=1880136072, k4=1744830482, k5=1744896512
- 1731|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1732|       |static void test_115(void)
- 1733|      1|{
- 1734|      1|    int k1=1753220858,k2=1233141982,k3=1880136072,k4=1744830482,k5=1744896512;
- 1735|      1|    int v=1;
- 1736|      1|    TreeTable *t; treetable_new(&t);
- 1737|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1738|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1739|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1740|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1741|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1742|       |
- 1743|      1|}
- 1744|       |
- 1745|       |/* test_116: k1=1040187393, k2=1056964608, k3=1090522368, k4=1058111744, k5=0
- 1746|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1747|       |static void test_116(void)
- 1748|      1|{
- 1749|      1|    int k1=1040187393,k2=1056964608,k3=1090522368,k4=1058111744,k5=0;
- 1750|      1|    int v=1;
- 1751|      1|    TreeTable *t; treetable_new(&t);
- 1752|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1753|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1754|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1755|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1756|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1757|       |
- 1758|      1|}
- 1759|       |
- 1760|       |/* test_117: k1=-33542144, k2=16777216, k3=4096, k4=33554433, k5=1
- 1761|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1762|       |static void test_117(void)
- 1763|      1|{
- 1764|      1|    int k1=-33542144,k2=16777216,k3=4096,k4=33554433,k5=1;
- 1765|      1|    int v=1;
- 1766|      1|    TreeTable *t; treetable_new(&t);
- 1767|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1768|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1769|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1770|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1771|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1772|       |
- 1773|      1|}
- 1774|       |
- 1775|       |/* test_118: k1=-2139090928, k2=16777216, k3=729813008, k4=0, k5=-2130706431
- 1776|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1777|       |static void test_118(void)
- 1778|      1|{
- 1779|      1|    int k1=-2139090928,k2=16777216,k3=729813008,k4=0,k5=-2130706431;
- 1780|      1|    int v=1;
- 1781|      1|    TreeTable *t; treetable_new(&t);
- 1782|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1783|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1784|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1785|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1786|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1787|       |
- 1788|      1|}
- 1789|       |
- 1790|       |/* test_119: k1=1040187392, k2=1342177280, k3=1090522368, k4=1611759872, k5=0
- 1791|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1792|       |static void test_119(void)
- 1793|      1|{
- 1794|      1|    int k1=1040187392,k2=1342177280,k3=1090522368,k4=1611759872,k5=0;
- 1795|      1|    int v=1;
- 1796|      1|    TreeTable *t; treetable_new(&t);
- 1797|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1798|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1799|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1800|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1801|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1802|       |
- 1803|      1|}
- 1804|       |
- 1805|       |/* test_120: k1=1040187392, k2=16777216, k3=1090519040, k4=1146880, k5=0
- 1806|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1807|       |static void test_120(void)
- 1808|      1|{
- 1809|      1|    int k1=1040187392,k2=16777216,k3=1090519040,k4=1146880,k5=0;
- 1810|      1|    int v=1;
- 1811|      1|    TreeTable *t; treetable_new(&t);
- 1812|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1813|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1814|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1815|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1816|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1817|       |
- 1818|      1|}
- 1819|       |
- 1820|       |/* test_121: k1=33588155, k2=50396224, k3=234881024, k4=50365373, k5=16777216
- 1821|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1822|       |static void test_121(void)
- 1823|      1|{
- 1824|      1|    int k1=33588155,k2=50396224,k3=234881024,k4=50365373,k5=16777216;
- 1825|      1|    int v=1;
- 1826|      1|    TreeTable *t; treetable_new(&t);
- 1827|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1828|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1829|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1830|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1831|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1832|       |
- 1833|      1|}
- 1834|       |
- 1835|       |/* test_122: k1=1040187392, k2=-50331648, k3=1090519040, k4=-2129166336, k5=0
- 1836|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1837|       |static void test_122(void)
- 1838|      1|{
- 1839|      1|    int k1=1040187392,k2=-50331648,k3=1090519040,k4=-2129166336,k5=0;
- 1840|      1|    int v=1;
- 1841|      1|    TreeTable *t; treetable_new(&t);
- 1842|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1843|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1844|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1845|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1846|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1847|       |
- 1848|      1|}
- 1849|       |
- 1850|       |/* test_123: k1=503320576, k2=-1621098594, k3=553648128, k4=0, k5=-2147483647
- 1851|       | * Checks: balanced+sorted after zigzag insertion (exercises L-R and R-L rotations). */
- 1852|       |static void test_123(void)
- 1853|      1|{
- 1854|      1|    int k1=503320576,k2=-1621098594,k3=553648128,k4=0,k5=-2147483647;
- 1855|      1|    int v=1;
- 1856|      1|    TreeTable *t; treetable_new(&t);
- 1857|      1|    treetable_add(t,&k3,&v); assert(balanced(t)&&sorted(t));
- 1858|      1|    treetable_add(t,&k5,&v); assert(balanced(t)&&sorted(t));
- 1859|      1|    treetable_add(t,&k1,&v); assert(balanced(t)&&sorted(t));
- 1860|      1|    treetable_add(t,&k4,&v); assert(balanced(t)&&sorted(t));
- 1861|      1|    treetable_add(t,&k2,&v); assert(balanced(t)&&sorted(t));
- 1862|       |
- 1863|      1|}
- 1864|       |
- 1865|       |int main(void)
- 1866|      4|{
- 1867|      4|    test_1(); printf("test_1 passed\n");
- 1868|      4|    test_2(); printf("test_2 passed\n");
- 1869|      4|    test_3(); printf("test_3 passed\n");
- 1870|      4|    test_4(); printf("test_4 passed\n");
- 1871|      4|    test_5(); printf("test_5 passed\n");
- 1872|      4|    test_6(); printf("test_6 passed\n");
- 1873|      4|    test_7(); printf("test_7 passed\n");
- 1874|      4|    test_8(); printf("test_8 passed\n");
- 1875|      4|    test_9(); printf("test_9 passed\n");
- 1876|      4|    test_10(); printf("test_10 passed\n");
- 1877|      4|    test_11(); printf("test_11 passed\n");
- 1878|      4|    test_12(); printf("test_12 passed\n");
- 1879|      4|    test_13(); printf("test_13 passed\n");
- 1880|      4|    test_14(); printf("test_14 passed\n");
- 1881|      4|    test_15(); printf("test_15 passed\n");
- 1882|      4|    test_16(); printf("test_16 passed\n");
- 1883|      4|    test_17(); printf("test_17 passed\n");
- 1884|      4|    test_18(); printf("test_18 passed\n");
- 1885|      4|    test_19(); printf("test_19 passed\n");
- 1886|      4|    test_20(); printf("test_20 passed\n");
- 1887|      4|    test_21(); printf("test_21 passed\n");
- 1888|      4|    test_22(); printf("test_22 passed\n");
- 1889|      4|    test_23(); printf("test_23 passed\n");
- 1890|      4|    test_24(); printf("test_24 passed\n");
- 1891|      4|    test_25(); printf("test_25 passed\n");
- 1892|      4|    test_26(); printf("test_26 passed\n");
- 1893|      4|    test_27(); printf("test_27 passed\n");
- 1894|      4|    test_28(); printf("test_28 passed\n");
- 1895|      4|    test_29(); printf("test_29 passed\n");
- 1896|      4|    test_30(); printf("test_30 passed\n");
- 1897|      4|    test_31(); printf("test_31 passed\n");
- 1898|      4|    test_32(); printf("test_32 passed\n");
- 1899|      4|    test_33(); printf("test_33 passed\n");
- 1900|      4|    test_34(); printf("test_34 passed\n");
- 1901|      4|    test_35(); printf("test_35 passed\n");
- 1902|      4|    test_36(); printf("test_36 passed\n");
- 1903|      4|    test_37(); printf("test_37 passed\n");
- 1904|      4|    test_38(); printf("test_38 passed\n");
- 1905|      4|    test_39(); printf("test_39 passed\n");
- 1906|      4|    test_40(); printf("test_40 passed\n");
- 1907|      4|    test_41(); printf("test_41 passed\n");
- 1908|      4|    test_42(); printf("test_42 passed\n");
- 1909|      4|    test_43(); printf("test_43 passed\n");
- 1910|      4|    test_44(); printf("test_44 passed\n");
- 1911|      4|    test_45(); printf("test_45 passed\n");
- 1912|      4|    test_46(); printf("test_46 passed\n");
- 1913|      4|    test_47(); printf("test_47 passed\n");
- 1914|      4|    test_48(); printf("test_48 passed\n");
- 1915|      4|    test_49(); printf("test_49 passed\n");
- 1916|      4|    test_50(); printf("test_50 passed\n");
- 1917|      4|    test_51(); printf("test_51 passed\n");
- 1918|      4|    test_52(); printf("test_52 passed\n");
- 1919|      4|    test_53(); printf("test_53 passed\n");
- 1920|      4|    test_54(); printf("test_54 passed\n");
- 1921|      4|    test_55(); printf("test_55 passed\n");
- 1922|      4|    test_56(); printf("test_56 passed\n");
- 1923|      4|    test_57(); printf("test_57 passed\n");
- 1924|      4|    test_58(); printf("test_58 passed\n");
- 1925|      4|    test_59(); printf("test_59 passed\n");
- 1926|      4|    test_60(); printf("test_60 passed\n");
- 1927|      4|    test_61(); printf("test_61 passed\n");
- 1928|      4|    test_62(); printf("test_62 passed\n");
- 1929|      4|    test_63(); printf("test_63 passed\n");
- 1930|      4|    test_64(); printf("test_64 passed\n");
- 1931|      4|    test_65(); printf("test_65 passed\n");
- 1932|      4|    test_66(); printf("test_66 passed\n");
- 1933|      4|    test_67(); printf("test_67 passed\n");
- 1934|      4|    test_68(); printf("test_68 passed\n");
- 1935|      4|    test_69(); printf("test_69 passed\n");
- 1936|      4|    test_70(); printf("test_70 passed\n");
- 1937|      4|    test_71(); printf("test_71 passed\n");
- 1938|      4|    test_72(); printf("test_72 passed\n");
- 1939|      4|    test_73(); printf("test_73 passed\n");
- 1940|      4|    test_74(); printf("test_74 passed\n");
- 1941|      4|    test_75(); printf("test_75 passed\n");
- 1942|      4|    test_76(); printf("test_76 passed\n");
- 1943|      4|    test_77(); printf("test_77 passed\n");
- 1944|      4|    test_78(); printf("test_78 passed\n");
- 1945|      4|    test_79(); printf("test_79 passed\n");
- 1946|      4|    test_80(); printf("test_80 passed\n");
- 1947|      4|    test_81(); printf("test_81 passed\n");
- 1948|      4|    test_82(); printf("test_82 passed\n");
- 1949|      4|    test_83(); printf("test_83 passed\n");
- 1950|      4|    test_84(); printf("test_84 passed\n");
- 1951|      4|    test_85(); printf("test_85 passed\n");
- 1952|      4|    test_86(); printf("test_86 passed\n");
- 1953|      4|    test_87(); printf("test_87 passed\n");
- 1954|      4|    test_88(); printf("test_88 passed\n");
- 1955|      4|    test_89(); printf("test_89 passed\n");
- 1956|      4|    test_90(); printf("test_90 passed\n");
- 1957|      4|    test_91(); printf("test_91 passed\n");
- 1958|      4|    test_92(); printf("test_92 passed\n");
- 1959|      4|    test_93(); printf("test_93 passed\n");
- 1960|      4|    test_94(); printf("test_94 passed\n");
- 1961|      4|    test_95(); printf("test_95 passed\n");
- 1962|      4|    test_96(); printf("test_96 passed\n");
- 1963|      4|    test_97(); printf("test_97 passed\n");
- 1964|      4|    test_98(); printf("test_98 passed\n");
- 1965|      4|    test_99(); printf("test_99 passed\n");
- 1966|      4|    test_100(); printf("test_100 passed\n");
- 1967|      4|    test_101(); printf("test_101 passed\n");
- 1968|      4|    test_102(); printf("test_102 passed\n");
- 1969|      4|    test_103(); printf("test_103 passed\n");
- 1970|      4|    test_104(); printf("test_104 passed\n");
- 1971|      4|    test_105(); printf("test_105 passed\n");
- 1972|      4|    test_106(); printf("test_106 passed\n");
- 1973|      4|    test_107(); printf("test_107 passed\n");
- 1974|      4|    test_108(); printf("test_108 passed\n");
- 1975|      4|    test_109(); printf("test_109 passed\n");
- 1976|      4|    test_110(); printf("test_110 passed\n");
- 1977|      4|    test_111(); printf("test_111 passed\n");
- 1978|      4|    test_112(); printf("test_112 passed\n");
- 1979|      4|    test_113(); printf("test_113 passed\n");
- 1980|      4|    test_114(); printf("test_114 passed\n");
- 1981|      4|    test_115(); printf("test_115 passed\n");
- 1982|      4|    test_116(); printf("test_116 passed\n");
- 1983|      4|    test_117(); printf("test_117 passed\n");
- 1984|      4|    test_118(); printf("test_118 passed\n");
- 1985|      4|    test_119(); printf("test_119 passed\n");
- 1986|      4|    test_120(); printf("test_120 passed\n");
- 1987|      4|    test_121(); printf("test_121 passed\n");
- 1988|      4|    test_122(); printf("test_122 passed\n");
- 1989|      4|    test_123(); printf("test_123 passed\n");
- 1990|      4|    printf("All 123 tests passed.\n");
- 1991|      4|    return 0;
- 1992|      4|}
+  567|     54|    return is_sorted_rec(t, t->root, INT_MIN, INT_MAX);
+  568|     54|}
 

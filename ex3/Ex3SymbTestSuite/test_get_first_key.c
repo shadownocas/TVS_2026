@@ -1,18 +1,7 @@
 /*
- * Property: get_first_key correctness.
+ * Symbolic test: test_get_first_key.c
  *
- * (b) After inserting a single key k, get_first_key must return k.
- * (c) After inserting two distinct keys k1 and k2, get_first_key must
- *     return the smaller one regardless of insertion order.
- * (d) After inserting four keys in descending order, the minimum key k1
- *     ends up as a deep left leaf, requiring tree_min to walk multiple
- *     left-child pointers.
- *
- * NOTE: empty-table case (a) is in test_get_first_key_empty.c because
- * it triggers BUG-002 — see Ex3BugReport.txt.
- *
- * Functions exercised: treetable_add, treetable_get_first_key,
- *                      tree_min (single-step and multi-step left walks).
+ * Property: Correctness of minimum-key retrieval.
  */
 
 #include <klee/klee.h>
@@ -43,7 +32,6 @@ int main(void)
     int v1=1, v2=2, v3=3, v4=4;
     void *out = NULL;
 
-    /* ---- (b) single key ---- */
     TreeTable *t1;
     treetable_new(&t1);
     treetable_add(t1, &k1, &v1);
@@ -52,7 +40,6 @@ int main(void)
     assert(treetable_get_first_key(t1, &out) == CC_OK);
     assert(*(int *)out == k1);
 
-    /* ---- (c) two keys: first key must be the minimum ---- */
     TreeTable *t2;
     treetable_new(&t2);
     treetable_add(t2, &k2, &v2);
@@ -62,7 +49,6 @@ int main(void)
     assert(treetable_get_first_key(t2, &out) == CC_OK);
     assert(*(int *)out == k1);
 
-    /* ---- (d) four keys descending: min is a deep left leaf ---- */
     TreeTable *t4;
     treetable_new(&t4);
     treetable_add(t4, &k4, &v4);

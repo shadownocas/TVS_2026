@@ -1,13 +1,10 @@
 /*
- * Concrete test suite derived from: test_validity_zigzag_insert.c
- * Property: Validity preservation after a Left-Right zigzag insertion pattern.
+ * Concrete test suite derived from: test_validity_single_add.c
+ * Property: Validity preservation after single zigzag insertion.
  *
- * Insertion order k3, k1, k2 with k1 < k2 < k3 forces a Left-Right double
- * rotation inside rebalance_after_insert, exercising the zigzag (LR) case
- * of the RB-tree rebalancer.
- *
- * Generated from KLEE ktest files:
- *   test000001.ktest : k1=0, k2=486539265, k3=553648384
+ * Inserting keys in the order k3, k1, k2 (with k1 < k2 < k3) forces
+ * a Left-Right double rotation inside rebalance_after_insert. The tree
+ * must remain a valid, balanced BST after this zigzag (L-R) case.
  */
 
 #include <assert.h>
@@ -23,7 +20,6 @@ int main(void)
     TreeTable *t;
     treetable_new(&t);
 
-    /* Insert in zigzag order: k3, k1, k2 */
     treetable_add(t, &k3, &v);
     assert(balanced(t));
     assert(sorted(t));

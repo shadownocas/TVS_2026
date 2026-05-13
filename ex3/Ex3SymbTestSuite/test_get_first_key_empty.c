@@ -1,11 +1,7 @@
 /*
- * Property: get_first_key on empty table returns CC_ERR_KEY_NOT_FOUND.
+ * Symbolic test: test_get_first_key_empty.c
  *
- * BUG-002 DETECTED: KLEE reports null page access at treetable.c:396
- * (inside tree_min). treetable_get_first_key calls tree_min on the root
- * without checking if the table is empty first. On an empty table,
- * root == sentinel and tree_min walks sentinel->left causing a null
- * page access. See Ex3BugReport.txt for full analysis.
+ * Property: get_first_key on empty table returns CC_ERR_KEY_NOT_FOUND.
  */
 
 #include <klee/klee.h>

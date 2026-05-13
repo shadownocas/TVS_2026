@@ -1,20 +1,7 @@
 /*
- * Property: Validity preservation after multiple insertions, including
- *           a duplicate key update, in both ascending and descending order.
+ * Symbolic test: test_validity_multi_add.c
  *
- * Two separate tables are built using INDEPENDENT sets of symbolic keys
- * so that KLEE explores genuinely distinct path spaces for each table:
- *
- *   (A) Keys a1 < a2 < a3 < a4 < a5 inserted in ascending order —
- *       forces right-heavy growth and left-rotations inside
- *       rebalance_after_insert (right-uncle / R-R cases).
- *   (B) Keys b1 < b2 < b3 < b4 < b5 inserted in descending order
- *       (b5 first, b1 last) — forces left-heavy growth and
- *       right-rotations (left-uncle / L-L cases).
- *
- * Functions exercised: treetable_add (new-key ascending, new-key descending,
- *                      duplicate/update), rebalance_after_insert (all major
- *                      branches), rotate_left, rotate_right.
+ * Property: Validity preservation after multiple insertions.
  */
 
 #include <klee/klee.h>
@@ -24,7 +11,6 @@
 
 int main(void)
 {
-    /* ---- Independent symbolic keys for table A (ascending insertion) ---- */
     int a1, a2, a3, a4, a5;
     klee_make_symbolic(&a1, sizeof(a1), "a1");
     klee_make_symbolic(&a2, sizeof(a2), "a2");
@@ -58,13 +44,9 @@ int main(void)
     treetable_add(ta, &a4, &va); assert(balanced(ta) && sorted(ta));
     treetable_add(ta, &a5, &va); assert(balanced(ta) && sorted(ta));
 
-    /* duplicate/update: re-insert middle key with a different value */
     treetable_add(ta, &a3, &vdup_a);
     assert(balanced(ta) && sorted(ta));
 
-    /* treetable_destroy removed for KLEE */
-
-    /* ---- Independent symbolic keys for table B (descending insertion) ---- */
     int b1, b2, b3, b4, b5;
     klee_make_symbolic(&b1, sizeof(b1), "b1");
     klee_make_symbolic(&b2, sizeof(b2), "b2");
@@ -92,17 +74,14 @@ int main(void)
     TreeTable *tb;
     treetable_new(&tb);
 
-    /* insert in descending value order: b5, b4, b3, b2, b1 */
     treetable_add(tb, &b5, &vb); assert(balanced(tb) && sorted(tb));
     treetable_add(tb, &b4, &vb); assert(balanced(tb) && sorted(tb));
     treetable_add(tb, &b3, &vb); assert(balanced(tb) && sorted(tb));
     treetable_add(tb, &b2, &vb); assert(balanced(tb) && sorted(tb));
     treetable_add(tb, &b1, &vb); assert(balanced(tb) && sorted(tb));
 
-    /* duplicate/update: re-insert middle key with a different value */
     treetable_add(tb, &b3, &vdup_b);
     assert(balanced(tb) && sorted(tb));
 
-    /* treetable_destroy removed for KLEE */
     return 0;
 }

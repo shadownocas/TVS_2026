@@ -1,18 +1,7 @@
 /*
- * Property: get_greater_than returns the IMMEDIATE successor, not just
- *           any key greater than the queried one.
+ * Symbolic test: test_get_greater_than_exact.c
  *
- * With keys k1 < k2 < k3 in the table, querying get_greater_than(k1)
- * must return exactly k2 (the next key in sorted order), NOT k3.
- * Similarly, querying get_greater_than(k2) must return exactly k3.
- *
- * This distinguishes a correct successor implementation from a naive one
- * that might return any larger key. It exercises the in-order traversal
- * logic inside get_successor_node more precisely than
- * test_get_greater_than.c, which only checks strict-greater-than.
- *
- * Functions exercised: treetable_add, treetable_get_greater_than,
- *                      get_successor_node (exact successor value check).
+ * Property: Immediate-successor precision of get_greater_than.
  */
 
 #include <klee/klee.h>
@@ -22,7 +11,6 @@
 
 int main(void)
 {
-    /* --- symbolic inputs: three distinct keys in strict ascending order --- */
     int k1, k2, k3;
     klee_make_symbolic(&k1, sizeof(k1), "k1");
     klee_make_symbolic(&k2, sizeof(k2), "k2");
@@ -37,7 +25,6 @@ int main(void)
     klee_assume(k1 < k2);
     klee_assume(k2 < k3);
 
-    /* --- set up --- */
     TreeTable *t;
     treetable_new(&t);
 
@@ -49,16 +36,12 @@ int main(void)
 
     void *out = NULL;
 
-    /* successor of k1 must be exactly k2, not k3 */
     assert(treetable_get_greater_than(t, &k1, &out) == CC_OK);
     assert(*(int *)out == k2);
 
-    /* successor of k2 must be exactly k3 */
     out = NULL;
     assert(treetable_get_greater_than(t, &k2, &out) == CC_OK);
     assert(*(int *)out == k3);
 
-    /* --- tear down --- */
-    /* treetable_destroy removed for KLEE */
     return 0;
 }

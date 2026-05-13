@@ -20,7 +20,6 @@ int main(void)
     klee_make_symbolic(&k2, sizeof(k2), "k2");
     klee_make_symbolic(&k3, sizeof(k3), "k3");
 
-    /* Avoid sentinel collisions in sorted() */
     klee_assume(k1 < INT_MAX);
     klee_assume(k1 > INT_MIN);
     klee_assume(k2 > INT_MIN);
@@ -28,20 +27,10 @@ int main(void)
     klee_assume(k3 < INT_MAX);
     klee_assume(k3 > INT_MIN);
 
-    /* Distinct keys */
     klee_assume(k1 != k2);
     klee_assume(k2 != k3);
     klee_assume(k1 != k3);
 
-    /*
-     * Force Left-Right rotation:
-     *
-     * Insert order:
-     *   k3, k1, k2
-     *
-     * Constraint:
-     *   k1 < k2 < k3
-     */
     klee_assume(k1 < k2);
     klee_assume(k2 < k3);
 
