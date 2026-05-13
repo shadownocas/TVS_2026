@@ -26,122 +26,141 @@
  *     Total:   5 bytes
  *     Oracle:  none (read-only)
  *
+ * MEMORY MODEL
+ * ============
+ * Keys and values for treetable_add are heap-allocated. Every pointer is
+ * tracked in a local allocs[] array. treetable_destroy frees all k/v pairs
+ * that were successfully inserted. The remaining loop at done: frees any
+ * that were allocated but never handed to the table (e.g. on failed add or
+ * early goto done). Read-only operations use stack variables — the tree
+ * never stores those pointers.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <stdint.h>
 #include "treetable.h"
 
-/* ------------------------------------------------------------------
- * __AFL_LOOP is provided by afl-clang-fast at compile time.
- * When compiled with normal gcc it is not defined, so we define it
- * here as a one-shot loop so the harness still builds and runs.
- * ------------------------------------------------------------------ */
 #ifndef __AFL_LOOP
 #define __AFL_LOOP(x) (({ static int __c = 0; __c++ == 0; }))
 #endif
 
 #ifndef __AFL_INIT
-#define __AFL_INIT() do {} while(0)
+#define __AFL_INIT() \
+    do               \
+    {                \
+    } while (0)
 #endif
 
-/* ------------------------------------------------------------------
- * Safe read helpers — advance cursor, return 0 on underflow
- * ------------------------------------------------------------------ */
-static int read_byte(const unsigned char *buf, size_t len,
-                     size_t *cur, unsigned char *out) {
-    if (*cur >= len) return 0;
-    *out = buf[(*cur)++];
+#define MAX_INPUT 4096
+
+static uint8_t input_buf[MAX_INPUT];
+static size_t input_len;
+static size_t input_pos;
+
+static int read_bytes(void *dst, size_t n)
+{
+    if (input_pos + n > input_len)
+        return 0;
+    memcpy(dst, input_buf + input_pos, n);
+    input_pos += n;
     return 1;
 }
 
-static int read_int(const unsigned char *buf, size_t len,
-                    size_t *cur, int *out) {
-    if (*cur + 4 > len) return 0;
-    memcpy(out, buf + *cur, 4);
-    *cur += 4;
-    return 1;
-}
-
-/* ================================================================== */
-int main(void) {
-
+int main(void)
+{
     __AFL_INIT();
 
-    static unsigned char buf[4096]; // No risk of stack overflow since it doesnt live in stack
+    while (__AFL_LOOP(1000))
+    {
 
-    while (__AFL_LOOP(1000)) {
+        input_len = fread(input_buf, 1, MAX_INPUT, stdin);
+        input_pos = 0;
 
-        /* --- 1. Read input from stdin ---------------------------- */
-        size_t len = fread(buf, 1, sizeof(buf), stdin);
-        if (len == 0)
-            continue;
-
-        /* --- 2. Create a fresh TreeTable ------------------------- */
         TreeTable *t = NULL;
         if (treetable_new(&t) != CC_OK || t == NULL)
             continue;
 
-        /* --- 3. Parse and dispatch commands ---------------------- */
-        size_t cur = 0;
+        void *allocs[512];
+        int nallocs = 0;
 
-        while (cur < len) {
+        uint8_t op;
 
-            unsigned char opcode;
-            if (!read_byte(buf, len, &cur, &opcode))
-                break;
+        while (read_bytes(&op, 1))
+        {
 
-            int raw_key, raw_val;
-            void *out = NULL;
+            switch (op)
+            {
 
-            switch (opcode) {
-
-            /* ---- treetable_add ---------------------------------- */
             case 0x00:
-                if (!read_int(buf, len, &cur, &raw_key)) goto done;
-                if (!read_int(buf, len, &cur, &raw_val)) goto done;
+            {
+                int *k = malloc(sizeof(int));
+                int *v = malloc(sizeof(int));
+                if (!k || !v)
                 {
-                    int *k = malloc(sizeof(int));
-                    int *v = malloc(sizeof(int));
-                    if (!k || !v) { free(k); free(v); goto done; }
+                    free(k);
+                    free(v);
+                    goto done;
+                }
 
-                    *k = raw_key;
-                    *v = raw_val;
+                allocs[nallocs++] = k;
+                allocs[nallocs++] = v;
 
-                    treetable_add(t, k, v);
+                if (!read_bytes(k, sizeof(int)))
+                    goto done;
+                if (!read_bytes(v, sizeof(int)))
+                    goto done;
 
-                    /* Oracle: assert invariants after every modification */
+                if (treetable_add(t, k, v) == CC_OK)
+                {
+                    nallocs -= 2;
+
                     assert(balanced(t) && sorted(t));
                 }
                 break;
+            }
 
-            /* ---- treetable_get ---------------------------------- */
             case 0x01:
-                if (!read_int(buf, len, &cur, &raw_key)) goto done;
-                treetable_get(t, &raw_key, &out);
-                break;
+            {
+                int key;
+                if (!read_bytes(&key, sizeof(int)))
+                    goto done;
 
-            /* ---- treetable_get_first_key ------------------------ */
+                void *out = NULL;
+                treetable_get(t, &key, &out);
+                break;
+            }
+
             case 0x02:
+            {
+                void *out = NULL;
                 treetable_get_first_key(t, &out);
                 break;
+            }
 
-            /* ---- treetable_get_greater_than --------------------- */
             case 0x03:
-                if (!read_int(buf, len, &cur, &raw_key)) goto done;
-                treetable_get_greater_than(t, &raw_key, &out);
+            {
+                int key;
+                if (!read_bytes(&key, sizeof(int)))
+                    goto done;
+
+                void *out = NULL;
+                treetable_get_greater_than(t, &key, &out);
                 break;
+            }
 
             default:
-                break;  /* skip unknown opcodes, keep parsing */
+                break;
             }
         }
 
     done:
-        /* --- 4. Destroy table — also frees all keys and values --- */
         treetable_destroy(t);
+
+        for (int i = 0; i < nallocs; i++)
+            free(allocs[i]);
     }
 
     return 0;
