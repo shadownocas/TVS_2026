@@ -2,21 +2,11 @@
  * crash_000006.c
  *
  * Group    : crashes
- * Property : ASSERTION VIOLATION — balanced(t) && sorted(t) failed after
- *            treetable_add(), indicating the RB-tree invariant was broken
- *            by the sequence of insertions below.
+ * Property : NULL DEREFERENCE — tree_min() reads through a null/near-null
+ *            pointer when treetable_get_first_key() is called on an empty
+ *            or structurally invalid tree.
  *
  * Signal   : SIGABRT (sig:06) — assert() called abort()
- *
- * Derived from AFL++ crash input: ex2/Ex2Harness/outputs/crashes/id:000006,sig:06,src:000000,time:800,op:havoc,rep:32
- * Total decoded steps: 11
- *
- * To reproduce (from project root):
- *   AFL_USE_ASAN=1 afl-clang-fast -g -O1 ex2/Ex2Harness/harness.c  *       TreeTable/treetable.c -I TreeTable/ -o harness_fuzz
- *   ./harness_fuzz < "ex2/Ex2Harness/outputs/crashes/id:000006,sig:06,src:000000,time:800,op:havoc,rep:32"
- *
- * Compile this test (from ex2/Ex2ConcTestSuite/crashes/):
- *   gcc -g -fsanitize=address -o crash_000006 crash_000006.c  *       ../../../TreeTable/treetable.c -I ../../../TreeTable/
  *
  * AddressSanitizer / runtime report:
  *

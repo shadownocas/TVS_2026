@@ -8,16 +8,6 @@
  *
  * Signal   : SIGABRT (sig:06) — assert() called abort()
  *
- * Derived from AFL++ crash input: ex2/Ex2Harness/outputs/crashes/id:000019,sig:06,src:000000,time:8272,op:havoc,rep:64
- * Total decoded steps: 7
- *
- * To reproduce (from project root):
- *   AFL_USE_ASAN=1 afl-clang-fast -g -O1 ex2/Ex2Harness/harness.c  *       TreeTable/treetable.c -I TreeTable/ -o harness_fuzz
- *   ./harness_fuzz < "ex2/Ex2Harness/outputs/crashes/id:000019,sig:06,src:000000,time:8272,op:havoc,rep:64"
- *
- * Compile this test (from ex2/Ex2ConcTestSuite/crashes/):
- *   gcc -g -fsanitize=address -o crash_000019 crash_000019.c  *       ../../../TreeTable/treetable.c -I ../../../TreeTable/
- *
  * AddressSanitizer / runtime report:
  *
  * harness_fuzz: ex2/Ex2Harness/harness.c:128: int main(void): Assertion `balanced(t) && sorted(t)' failed.
