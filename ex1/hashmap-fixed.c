@@ -80,17 +80,17 @@ void hashmap_free(hashmap_t map) {
 
   for (int i = 0; i < map->size; i++) {
     struct hashmap_field *field = map->fields + i;
-
-    for (int j = 0; j < field->size; j++) {
-      struct hashmap_entry *entry = field->entries + j;
-      free(entry->key);
-
-      /* The hashmap no longer owns entry->val.
-         It only stores the pointer supplied by the caller. */
-    }
-
+    if (field->entries != 0) {
+      int j;
+      for ( j = 0; j < field->size; j++) {
+        struct hashmap_entry *entry = field->entries + j;
+        free(entry->key);
+      }
     free(field->entries);
+    }
   }
+  free(map->fields);
+  free(map);
 }
 
 void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
@@ -102,10 +102,9 @@ void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
 
   int hash = hashmap_hash(key, map->size - 1);
   struct hashmap_field *field = map->fields + hash;
-  struct hashmap_entry *entry = NULL;
 
   for (int i = 0; i < field->size; i++) {
-    entry = field->entries + i;
+    struct hashmap_entry *entry = field->entries + i;
 
     if (strcmp(entry->key, key) == 0) {
       if (value == NULL) {
@@ -114,30 +113,29 @@ void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
         field->size--;
 
         if (entry != field->entries + field->size) {
-          *entry = field->entries[field->size];
+          memcpy((void *)entry, (void *)(field->entries + field->size),
+                 sizeof(struct hashmap_entry));
         }
 
+        /* BUG-10 */
+        /* Fixes 10 */
         if (field->size == 0) {
           free(field->entries);
           field->entries = NULL;
         } else {
-          /* BUG-10 */
-          /* Fixes 10 */
-          struct hashmap_entry *shrunk =
+          struct hashmap_entry *tmp =
               (struct hashmap_entry *)realloc(
-                  field->entries,
-                  sizeof(struct hashmap_entry) * (size_t)field->size);
+                  (void *)field->entries,
+                  field->size * sizeof(struct hashmap_entry));
 
-          if (shrunk != NULL) {
-            field->entries = shrunk;
+          if (tmp != NULL) {
+            field->entries = tmp;
           }
         }
 
         return;
       }
 
-      /* BUG-9 */
-      /* Fixes 9 */
       entry->val = value;
       entry->len = length;
       return;
@@ -150,33 +148,49 @@ void hashmap_set(hashmap_t map, char *key, void *value, size_t length) {
 
   /* BUG-6 */
   /* BUG-7 */
-  /* Fixes 6 and 7 */
-  struct hashmap_entry *new_entries =
+  struct hashmap_entry *entries =
       (struct hashmap_entry *)realloc(
-          field->entries,
-          sizeof(struct hashmap_entry) * (size_t)(field->size + 1));
+          (void *)field->entries,
+          (field->size + 1) * sizeof(struct hashmap_entry));
 
-  if (new_entries == NULL) {
+  /* Fixes 6 */
+  /* Fixes 7 */
+  if (entries == NULL) {
     return;
   }
 
-  field->entries = new_entries;
-  entry = &field->entries[field->size];
+  field->entries = entries;
 
-  entry->key = NULL;
-  entry->val = NULL;
-  entry->len = 0;
-
-  field->size++;
+  struct hashmap_entry *entry = field->entries + field->size;
 
   /* BUG-8 */
-  /* Fixes 8 */
-  entry->key = key;
+  /* FP
+  * Infer  still reports a potential memory leak for entry->key.
+  * This is a false positive: ownership of the allocated key is
+  * transferred to the hashmap entry and the memory is later released
+  * in hashmap_free() through free(entry->key).
+  */
+  entry->key = (char *)malloc(strlen(key) + 1);
 
+  /* Fixes 8 */
+  if (entry->key == NULL) {
+    return;
+  }
+
+  strcpy(entry->key, key);
   /* BUG-9 */
-  /* Fixes 9 */
+  /* Fixes 9
+  * The original code allocated a copy of value with malloc(length)
+  * and passed it to memcpy without checking whether malloc returned NULL.
+  *
+  * This fixed version avoids that allocation in hashmap_set():
+  * the hashmap stores the caller-provided value pointer and only
+  * allocates/copies the value in hashmap_get().
+  */
+
   entry->val = value;
   entry->len = length;
+  field->size++;
 }
 
 void *hashmap_get(hashmap_t map, char *key) {

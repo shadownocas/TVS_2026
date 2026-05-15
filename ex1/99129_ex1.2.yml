@@ -22,13 +22,15 @@ report:
       lineno: 60
       class: fn
       description: |
-        Not found by the tools. hashmap_new() accepts size <= 0. Later, hashmap_set() and hashmap_get() call hashmap_hash(key, map->size - 1). For size 0, this leads to modulo by zero in hashmap_hash. For negative sizes, the allocation size and indexing become invalid.
+        Not found by the tools. hashmap_new() accepts size <= 0. Later, hashmap_set() and hashmap_get() 
+        call hashmap_hash(key, map->size - 1). For size 0, this leads to module by zero in hashmap_hash. 
+        For negative sizes, the allocation size and indexing become invalid.
       recommendation: |
-        Reject size <= 0 in hashmap_new().
+        We need to reject size <= 0 in hashmap_new().
 
   - bug:
       type: Null Dereference
-      lineno: 94
+      lineno: 82
       class: fn
       description: |
         Not found by the tools. hashmap_free() assumes map is not NULL. If the caller passes NULL, map->size is dereferenced.
@@ -37,10 +39,11 @@ report:
 
   - bug:
       type: Null Dereference
-      lineno: 102
+      lineno: 99
       class: fn
       description: |
-        Not found by the tools. hashmap_set() assumes map, map->fields, and key are non-NULL. Passing NULL would cause a null dereference in hashmap_hash() or when accessing map->fields.
+        Not found by the tools. hashmap_set() assumes map, map->fields, and key are non-NULL.
+         Passing NULL would cause a null dereference in hashmap_hash() or when accessing map->fields.
       recommendation: |
         Validate map, map->fields, and key before using them.
 
@@ -58,7 +61,7 @@ report:
       lineno: 120
       class: fn
       description: |
-        Not found by the tools as a concrete bug. entries is allocated with malloc but is used by memcpy without checking whether malloc returned NULL.
+        Not found by the tools. entries is allocated with malloc but is used by memcpy without checking whether malloc returned NULL.
       recommendation: |
         Check entries before memcpy.
 
@@ -67,7 +70,8 @@ report:
       lineno: 124
       class: tp
       description: |
-        Found by clang-analyzer as an incorrect malloc size. malloc(sizeof(key)) allocates the size of the pointer, not the length of the string. strcpy may write past the allocated buffer.
+        Found by clang-analyzer as an incorrect malloc size. malloc(sizeof(key)) allocates the size of the pointer, 
+        not the length of the string. strcpy may write past the allocated buffer.
       recommendation: |
         Allocate strlen(key) + 1 bytes.
 
@@ -85,7 +89,8 @@ report:
       lineno: 141
       class: fn
       description: |
-        Not found by the tools. The result of realloc is assigned directly to field->entries. If realloc fails, the old pointer is lost and the hashmap becomes inconsistent.
+        Not found by the tools. In function hashmap_set the result of realloc is assigned directly to field->entries. 
+        If realloc fails, the old pointer is lost and the hashmap becomes inconsistent.
       recommendation: |
         Store realloc's result in a temporary pointer and only assign it to field->entries if it succeeds.
 
